@@ -1,10 +1,13 @@
 from flask_restful import Resource
 from flask import request
+from werkzeug.security import  generate_password_hash
 import json
 
 from db.dbRedis import dbRedis
 from utils.gets import getUsuario
 from services.auth import auth, is_admin, is_your
+from models.Users import Users, user_schema, users_schema
+from App import db
 
 with open('db/db.json') as arq:
     usuarios = json.load(arq)
