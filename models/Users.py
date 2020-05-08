@@ -9,6 +9,7 @@ class Users(db.Model):
     active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    # children = relationship("Child", back_populates='users')
 
     def __init__(self, email, password, name):
         self.email = email
@@ -16,9 +17,9 @@ class Users(db.Model):
         self.name = name
 
 #Definindo o Schema do Marshmallow para facilitar a utilização de JSON
-class UsersSchema(ma.Schema):
+class UserSchema(ma.Schema):
     class Meta:
         fields = ('id', 'email', 'password', 'name', 'created_at', 'updated_at')
 
-user_schema = UsersSchema()
-users_schema = UsersSchema( many = True )
+user_schema = UserSchema()
+users_schema = UserSchema( many = True )

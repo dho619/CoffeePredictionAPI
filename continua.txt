@@ -1,0 +1,2 @@
+arrumar tds relationship
+ele faz o muitos para muitos automatico, basta ajustar

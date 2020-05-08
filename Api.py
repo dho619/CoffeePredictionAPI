@@ -10,7 +10,8 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 api = Api(app)#Criando api
 
-from models import Users
+
+from models import Users, Profiles, UserProfiles#, TypeContacts, Contacts, TypeAreas, Areas, Classification
 from routes import loading_Of_Routes
 loading_Of_Routes(api)#carregando todas as rotas
 
