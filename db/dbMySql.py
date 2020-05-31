@@ -1,7 +1,6 @@
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
+from Api import app
 
-def conectarDbMysql(app):
-    db = SQLAlchemy(app)
-    ma = Marshmallow(app)
-    return db, ma
+db = SQLAlchemy(app)
+ma = Marshmallow(app)

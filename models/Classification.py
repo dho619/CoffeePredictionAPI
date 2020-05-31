@@ -5,8 +5,11 @@ class Classifications(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     healthy = db.Column(db.Boolean, nullable=False)
     disease = db.Column(db.String(50), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.now())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     area_id = db.Column(db.Integer, db.ForeignKey('areas.id'))
+    user = db.relationship("Users", back_populates="classification")
+    area = db.relationship("Areas", back_populates="classification")
 
     def __init__(self, description, user_id, typeArea_id):
         self.description = description

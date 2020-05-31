@@ -7,11 +7,10 @@ from db.dbRedis import dbRedis
 from Api import db
 from utils.gets import getUsuario
 from services.auth import auth, is_admin, is_your
-# from models.Users import Users, user_schema, users_schema
+from models.Users import Users, user_schema, users_schema
 
 with open('db/db.json') as arq:
     usuarios = json.load(arq)
-
 
 class User(Resource):
     @auth.login_required#estar logado

@@ -1,6 +1,8 @@
 import datetime
 from Api import db, ma
 
+from models.UsersProfiles import usersProfiles
+
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
@@ -9,7 +11,7 @@ class Users(db.Model):
     active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now())
-    # children = relationship("Child", back_populates='users')
+    profiles = db.relationship("Profiles", secondary=usersProfiles, back_populates='users')
 
     def __init__(self, email, password, name):
         self.email = email

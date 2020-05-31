@@ -1,11 +1,11 @@
-import datetime
 from Api import db, ma
+from models.UsersProfiles import usersProfiles
 
 class Profiles(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(20), unique=True, nullable=False)
     description = db.Column(db.String(100), nullable=False)
-    userProfiles = db.relationship("UserProfiles", back_populates="profiles")
+    users = db.relationship("Users", secondary=usersProfiles, back_populates='profiles')
 
     def __init__(self, name, description):
         self.name = name

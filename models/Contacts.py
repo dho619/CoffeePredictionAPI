@@ -1,11 +1,11 @@
-import datetime
 from Api import db, ma
 
 class Contacts(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     description = db.Column(db.String(100), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    typeContact_id = db.Column(db.Integer, db.ForeignKey('typeContacts.id'))
+    typeContact_id = db.Column(db.Integer, db.ForeignKey('type_contacts.id'))
+    typeContact = db.relationship("TypeContacts", back_populates="contacts")
 
     def __init__(self, description, user_id, typeContact_id):
         self.description = description

@@ -1,2 +1,3 @@
-arrumar tds relationship
-ele faz o muitos para muitos automatico, basta ajustar
+
+
+pytest criar testes automaticos

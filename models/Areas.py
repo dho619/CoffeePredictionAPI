@@ -1,4 +1,3 @@
-import datetime
 from Api import db, ma
 
 class Areas(db.Model):
@@ -7,7 +6,9 @@ class Areas(db.Model):
     description = db.Column(db.String(100))
     location = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    typeArea_id = db.Column(db.Integer, db.ForeignKey('typeAreas.id'))
+    typeArea_id = db.Column(db.Integer, db.ForeignKey('type_areas.id'))
+    typeArea = db.relationship("TypeAreas", back_populates="areas")
+
 
     def __init__(self, name, description, location, user_id, typeArea_id):
         self.name = name
