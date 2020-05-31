@@ -1,0 +1,3 @@
+DEBUG = True
+SQLALCHEMY_DATABASE_URI = 'mysql://geovane:1.618_3,14@localhost:3306/TCC_development'
+SQLALCHEMY_TRACK_MODIFICATIONS = False
