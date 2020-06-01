@@ -1,6 +1,6 @@
 from flask_httpauth import HTTPTokenAuth
 from functools import wraps
-from flask import jsonify
+
 from utils.gets import getUsuario, getPerfis
 from utils.login import decode_auth_token
 
@@ -20,7 +20,7 @@ def is_admin(f):
         perfis= getPerfis({'id': auth.current_user})
         if 'admin' in perfis:
             return f(*args, **kwargs)
-        return jsonify({'message': "Not authorized."}), 401
+        return "Not authorized.", 401
     return wrapper
 
 #funcao para verificar se id passado e o id da pessoa logada

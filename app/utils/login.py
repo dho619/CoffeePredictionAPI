@@ -1,12 +1,11 @@
 import jwt, json
+from werkzeug.security import check_password_hash
+
 
 #criar o token
-def encode_auth_token(email, password):
+def encode_auth_token(user):
     try:
-        payload = {
-                    'email': email,
-                    'password': password
-                }
+        payload = user
         return jwt.encode(
             payload,
             'SENHA_MUITO_DIFICIL',
@@ -27,11 +26,9 @@ def decode_auth_token(auth_token):
 #Faz as validações de usuario e retorna o token
 def login_Usuario(email, password):
     email = email.lower()
-    with open('db/db.json') as arq:
-        usuarios = json.load(arq)
-    usuario = [ user for user in usuarios if user['email'] == email]
-    if len(usuario) > 0 and usuario[0]['password'] == password:
-        del usuario[0]['password']
-        return usuario[0], encode_auth_token(email, password)
+
+    user = db.query.get(email)
+    if user and check_password_hash(user['password'], password):
+        return user, encode_auth_token(user)
     else:
         return None, ''

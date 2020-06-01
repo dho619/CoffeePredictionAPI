@@ -1,6 +1,5 @@
 import json
-with open('db/db.json') as arq:
-    usuarios = json.load(arq)
+from app import db
 
 def getUsuario(args):
     if not('id' in args or 'email' in args):
@@ -14,14 +13,12 @@ def getUsuario(args):
             id = int(args['id'])
         except:
             return None
-        result = [usuario for usuario in usuarios if usuario['id'] == id]
+        result = Users.query.get(id)#busca usuario pelo id
     elif 'email' in args:
-        result = [usuario for usuario in usuarios if usuario['email'] == args['email'].lower()]
+        result = Users.query.get(id)#busca usuario pelo email
 
-    usuario = result[0] if len(result) > 0 else None
+    return result
 
-    return usuario
-
-def getPerfil(args):
+def getPerfis(args):
     usuario = getUsuario(args)
     return usuario['perfil']

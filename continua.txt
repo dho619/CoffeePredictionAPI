@@ -1,4 +1,6 @@
-1 - terminar crud usuario
+
+
+separar rotas em arquivos diferentes
 2 - criar login (pode reaproveita do old, exceto a parte de redis)
 3 - pesquisar como lotiar banco automaticamente para testes
 4 - criar crud dos outros models
