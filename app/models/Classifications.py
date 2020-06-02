@@ -11,15 +11,14 @@ class Classifications(db.Model):
     users = db.relationship("Users", back_populates="classification")
     areas = db.relationship("Areas", back_populates="classification")
 
-    def __init__(self, description, user_id, typeArea_id):
-        self.description = description
-        self.user_id = user_id
-        self.typeArea_id = typeArea_id
+    def __init__(self, healthy, disease):
+        self.healthy = healthy
+        self.disease = disease
 
 #Definindo o Schema do Marshmallow para facilitar a utilização de JSON
 class ClassificationSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'description', 'user_id', 'typeArea_id')
+        fields = ('id', 'healthy', 'disease', 'user_id', 'area_id')
 
 classification_schema = ClassificationSchema()
 classifications_schema = ClassificationSchema( many = True )

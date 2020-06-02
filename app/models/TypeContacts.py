@@ -12,8 +12,10 @@ class TypeContacts(db.Model):
 
 #Definindo o Schema do Marshmallow para facilitar a utilização de JSON
 class TypeContactSchema(ma.Schema):
+#    contacts = ma.Nested(ContactSchema)
     class Meta:
         fields = ('id', 'name', 'nickname')
+        include_fk = True
 
 typeContact_schema = TypeContactSchema()
 typeContacts_schema = TypeContactSchema( many = True )

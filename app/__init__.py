@@ -8,7 +8,7 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
 #importando models
-from .models import Users, Profiles, TypeContacts, Contacts, TypeAreas, Areas, Classification
+from .models import Users, Profiles, TypeContacts, Contacts, TypeAreas, Areas, Classifications
 #importando resources
 from .resources import Users
 #importando rotas

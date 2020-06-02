@@ -11,8 +11,11 @@ class Users(db.Model):
     active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now())
+
     profiles = db.relationship("Profiles", secondary=usersProfiles, back_populates='users')
     classification = db.relationship("Classifications", back_populates="users")
+    areas = db.relationship("Areas", back_populates="users")
+    contacts = db.relationship("Contacts", back_populates="users")
 
     def __init__(self, email, password, name):
         self.email = email
