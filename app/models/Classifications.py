@@ -8,8 +8,9 @@ class Classifications(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     area_id = db.Column(db.Integer, db.ForeignKey('areas.id'))
-    users = db.relationship("Users", back_populates="classification")
-    areas = db.relationship("Areas", back_populates="classification")
+
+    user = db.relationship("Users", back_populates="classifications")
+    area = db.relationship("Areas", back_populates="classifications")
 
     def __init__(self, healthy, disease):
         self.healthy = healthy
@@ -17,8 +18,11 @@ class Classifications(db.Model):
 
 #Definindo o Schema do Marshmallow para facilitar a utilização de JSON
 class ClassificationSchema(ma.Schema):
+    # user = ma.Nested('UserSchema', many=False, exclude=('classifications',))
+    # area = ma.Nested('AreaSchema', many=False, exclude=('classifications',))
+
     class Meta:
-        fields = ('id', 'healthy', 'disease', 'user_id', 'area_id')
+        fields = ('id', 'healthy', 'disease')
 
 classification_schema = ClassificationSchema()
 classifications_schema = ClassificationSchema( many = True )

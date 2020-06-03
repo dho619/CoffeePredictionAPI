@@ -13,9 +13,9 @@ class Users(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now())
 
     profiles = db.relationship("Profiles", secondary=usersProfiles, back_populates='users')
-    classification = db.relationship("Classifications", back_populates="users")
-    areas = db.relationship("Areas", back_populates="users")
-    contacts = db.relationship("Contacts", back_populates="users")
+    classifications = db.relationship("Classifications", back_populates="user")
+    areas = db.relationship("Areas", back_populates="user")
+    contacts = db.relationship("Contacts", back_populates="user")
 
     def __init__(self, email, password, name):
         self.email = email
@@ -24,8 +24,12 @@ class Users(db.Model):
 
 #Definindo o Schema do Marshmallow para facilitar a utilização de JSON
 class UserSchema(ma.Schema):
+    profiles = ma.Nested('ProfileSchema', many=True)
+    areas = ma.Nested('AreaSchema', many=True)
+    contacts = ma.Nested('ContactSchema', many=True)
+    # classifications = ma.Nested('ClassificationSchema', many=True, exclude=('user',))
     class Meta:
-        fields = ('id', 'email', 'name', 'created_at', 'updated_at')
+        fields = ('id', 'email', 'name', 'created_at', 'updated_at', 'profiles', 'areas', 'contacts')
 
 user_schema = UserSchema()
 users_schema = UserSchema( many = True )

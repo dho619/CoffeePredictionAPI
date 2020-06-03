@@ -1,5 +1,4 @@
-import json
-from app import db
+from ..models.Users import Users
 
 def getUsuario(args):
     if not('id' in args or 'email' in args):
@@ -15,10 +14,10 @@ def getUsuario(args):
             return None
         result = Users.query.get(id)#busca usuario pelo id
     elif 'email' in args:
-        result = Users.query.get(id)#busca usuario pelo email
+        user = Users.query.filter_by(email=args['email']).first()#busca usuario pelo email
 
     return result
 
-def getPerfis(args):
-    usuario = getUsuario(args)
-    return usuario['perfil']
+def isAdmin(user):
+    admin = [profile for profile in user.profiles if profile.name == 'admin']#adiciona se for perfil admin
+    return len(admin) > 0

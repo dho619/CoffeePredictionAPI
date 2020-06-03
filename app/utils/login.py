@@ -1,34 +1,46 @@
 import jwt, json
 from werkzeug.security import check_password_hash
-
+from datetime import datetime
+from app import app
+from ..models.Users import Users
+from .gets import isAdmin
 
 #criar o token
 def encode_auth_token(user):
     try:
-        payload = user
+        payload = {
+            #'exp': datetime.now() + timedelta(days=3), #valido por tres dias
+            'iat': datetime.now(), #data de criacao
+            'sub': user.id,
+            'admin': isAdmin(user),
+            'name': user.name
+        }
         return jwt.encode(
             payload,
-            'SENHA_MUITO_DIFICIL',
+            app.config['SECRET_KEY'],
             algorithm='HS256'
         )
     except Exception as e:
-        print(e)
+        # print(e)
+        return None
 
 #Transformar o token e dicionario denovo
 def decode_auth_token(auth_token):
     try:
-        payload = jwt.decode(auth_token, 'SENHA_MUITO_DIFICIL')
+        payload = jwt.decode(auth_token, app.config['SECRET_KEY'])
         return payload
     except Exception as e:
-        print(e)
-        return {}
+        return None
 
 #Faz as validações de usuario e retorna o token
-def login_Usuario(email, password):
-    email = email.lower()
+def login_Usuario(user_email, password):
+    user_email = user_email.lower()
+    try:
+        user = Users.query.filter_by(email=user_email).first()
+    except Exception as e:
+        user = None
 
-    user = db.query.get(email)
-    if user and check_password_hash(user['password'], password):
-        return user, encode_auth_token(user)
+    if user and check_password_hash(user.password, password):
+        return encode_auth_token(user)
     else:
-        return None, ''
+        return None

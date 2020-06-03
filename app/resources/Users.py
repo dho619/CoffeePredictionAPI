@@ -1,29 +1,37 @@
 from werkzeug.security import generate_password_hash
 from flask import request, jsonify
+from sqlalchemy import exc
 from app import db
 from ..models.Users import Users, user_schema, users_schema
 from ..models.Profiles import Profiles
 
 def post_user():
     #pegando os campos da requisicao
-    email = request.json['email']
-    password = request.json['password']
-    name = request.json['name']
+    try:
+        email = request.json['email']
+        password = request.json['password']
+        name = request.json['name']
+    except:
+        return jsonify({'message': 'Expected name, email and password'}), 400
+
     pass_hash = generate_password_hash(password)#criptografa a senha
     user = Users(email, pass_hash, name)
 
-    profile = Profiles.query.get(2) #buscando perfil comum
+    profile = Profiles.query.get(3) #buscando perfil comum
     user.profiles.append(profile) #adicionando perfil comum
     try:
         db.session.add(user)#adiciona
         db.session.commit()# commit no banco
         result = user_schema.dump(user)
         return jsonify({'message': 'Sucessfully registered', 'data': result}), 201
-    except Exception as e:
+    except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o email
             return jsonify({'message': 'This email is already in use', 'data': {}}), 406
         else:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
+    except:
+        return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
+
 
 def update_user(id):
     user = Users.query.get(id)#procura o usuario pelo id
@@ -42,11 +50,13 @@ def update_user(id):
         db.session.commit()
         result = user_schema.dump(user)
         return jsonify({'message': 'Sucessfully updated', 'data': result}), 201
-    except Exception as e:
-        if ('Duplicate entry' in e.orig.args[1]):#se isso for true, significa que teve duplicida e nesse caso so pode ser o email
+    except exc.IntegrityError as e:
+        if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o email
             return jsonify({'message': 'This email is already in use', 'data': {}}), 406
         else:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
+    except:
+        return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
 def get_users():
     users = Users.query.all()#pega todos usuarios

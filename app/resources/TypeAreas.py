@@ -1,22 +1,29 @@
 from flask import request, jsonify
+from sqlalchemy import exc
 from app import db
 from ..models.TypeAreas import TypeAreas, typeArea_schema, typeAreas_schema
 
 def post_typeArea():
     #pegando os campos da requisicao
-    name = request.json['name']
-    description = request.json['description']
+    try:
+        name = request.json['name']
+        description = request.json['description']
+    except:
+        return jsonify({'message': 'Expected name and description'}), 400
+
     typeArea = TypeAreas(name, description)
     try:
         db.session.add(typeArea)#adiciona
         db.session.commit()# commit no banco
         result = typeArea_schema.dump(typeArea)
         return jsonify({'message': 'Sucessfully registered', 'data': result}), 201
-    except Exception as e:
+    except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
         else:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
+    except:
+        return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
 def update_typeArea(id):
     typeArea = TypeAreas.query.get(id)#procura o typeArea pelo id
@@ -32,11 +39,13 @@ def update_typeArea(id):
         db.session.commit()
         result = typeArea_schema.dump(typeArea)
         return jsonify({'message': 'Sucessfully updated', 'data': result}), 201
-    except Exception as e:
-        if ('Duplicate entry' in e.orig.args[1]):#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
+    except exc.IntegrityError as e:
+        if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
         else:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
+    except:
+        return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
 def get_typeAreas():
     typeAreas = TypeAreas.query.all()#pega todos typeAreas

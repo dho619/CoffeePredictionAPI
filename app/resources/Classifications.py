@@ -3,17 +3,24 @@ from app import db
 from ..models.Classifications import Classifications, classification_schema, classifications_schema
 from ..models.Users import Users
 from ..models.Areas import Areas
+from ..services.auth import is_your
 
 def post_classification():
     #pegando os campos da requisicao
-    healthy = request.json['healthy']
-    disease = request.json['disease']
-    user = Users.query.get(request.json['user_id'])
-    area = Areas.query.get(request.json['area_id'])
+    try:
+        healthy = request.json['healthy']
+        disease = request.json['disease']
+        user = Users.query.get(request.json['user_id'])
+        area = Areas.query.get(request.json['area_id'])
+    except:
+        return jsonify({'message': 'Expected healthy, disease, user_id and area_id'}), 400
+
+    if not user or not area:
+        return jsonify({'message': 'area_id or user_id does not exist'}), 400
 
     classification = Classifications(healthy, disease)
-    classification.users = user
-    classification.areas = area
+    classification.user = user
+    classification.area = area
 
     try:
         db.session.add(classification)#adiciona
@@ -36,6 +43,9 @@ def get_classification(id):
     classification = Classifications.query.get(id)#busca classification pelo id
 
     if classification:#se existir
+        if not is_your(classification.user_id):
+            return jsonify({'message': "Unauthorized action."}), 401
+
         result = classification_schema.dump(classification)
         return jsonify({"message": "Sucessfully fetched", "data": result})
     #se nao existir
@@ -46,6 +56,9 @@ def delete_classification(id):
 
     if not classification:#se nao existir
         return jsonify({'message': "Classification don't exist", 'data': {}}), 404
+
+    if not is_your(classification.user_id):
+        return jsonify({'message': "Unauthorized action."}), 401
 
     try:
         db.session.delete(classification)

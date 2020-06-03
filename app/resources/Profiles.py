@@ -1,22 +1,30 @@
 from flask import request, jsonify
+from sqlalchemy import exc
 from app import db
 from ..models.Profiles import Profiles, profile_schema, profiles_schema
 
 def post_profile():
     #pegando os campos da requisicao
-    name = request.json['name']
-    description = request.json['description']
+    try:
+        name = request.json['name']
+        description = request.json['description']
+    except:
+        return jsonify({'message': 'Expected name and description'}), 400
+
+
     profile = Profiles(name, description)
     try:
         db.session.add(profile)#adiciona
         db.session.commit()# commit no banco
         result = profile_schema.dump(profile)
         return jsonify({'message': 'Sucessfully registered', 'data': result}), 201
-    except Exception as e:
+    except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
         else:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
+    except:
+        return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
 def update_profile(id):
     profile = Profiles.query.get(id)#procura o profile pelo id
@@ -32,11 +40,13 @@ def update_profile(id):
         db.session.commit()
         result = profile_schema.dump(profile)
         return jsonify({'message': 'Sucessfully updated', 'data': result}), 201
-    except Exception as e:
-        if ('Duplicate entry' in e.orig.args[1]):#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
+    except exc.IntegrityError as e:
+        if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
         else:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
+    except:
+        return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
 def get_profiles():
     profiles = Profiles.query.all()#pega todos profiles

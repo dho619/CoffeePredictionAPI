@@ -1,14 +1,6 @@
-contacts = ma.Nested(ContactSchema)
-arrumando o retorno usar como acima, ver se há como usar de ambos lados 
-
-adicionar coluna de onde clk o numero ou email na tabela de contatos
-em type contact trocar nickname para description
-
-**2 - criar login (pode reaproveita do old, exceto a parte de redis)
 ******3 - pesquisar como lotiar banco automaticamente para testes
-*************4 - criar crud dos outros models
 ******5 - adicionar perfis, tipo de area, tipos contatos e usuarios automaticamente
-**6 - adicionar a validacao das rotas (copiar de olds)
+
 7 - pytest criar testes automaticos
 
 ..| partiu ir pra criação mobile

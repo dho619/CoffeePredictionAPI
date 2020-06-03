@@ -1,29 +1,36 @@
+from flask import jsonify
 from flask_httpauth import HTTPTokenAuth
 from functools import wraps
-
-from utils.gets import getUsuario, getPerfis
-from utils.login import decode_auth_token
+from ..utils.login import decode_auth_token
+from ..utils.gets import getUsuario, isAdmin
 
 auth = HTTPTokenAuth(scheme='Bearer')
 
 @auth.verify_token
 def user_logged(token):
     user = decode_auth_token(token)
+    if not user:
+        return False
+    try:
+        auth.current_user = user['sub']#id do usuario logado
+        return True
+    except:
+        return False
 
-    auth.current_user = user['id'] if 'id' in user else ''
-    return 'id' in user
 
 #criando um decorador para autentificar se e admin
 def is_admin(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        perfis= getPerfis({'id': auth.current_user})
-        if 'admin' in perfis:
+        if isAdmin(getUsuario({'id': auth.current_user})):#pega o usuario e manda pro is Admin que retorna se e admin
             return f(*args, **kwargs)
-        return "Not authorized.", 401
+        return jsonify({'message': "Unauthorized, admin-only access."}), 401
     return wrapper
 
-#funcao para verificar se id passado e o id da pessoa logada
+
+# funcao para verificar se id passado e o id da pessoa logada
 def is_your(id):
+    if id == None:
+        return False
     usuario = getUsuario({'id': auth.current_user})
-    return usuario and ('admin' in usuario['perfis'] or usuario['id'] == id)
+    return usuario and (isAdmin(usuario) or usuario.id == int(id))
