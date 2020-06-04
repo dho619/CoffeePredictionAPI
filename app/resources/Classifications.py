@@ -18,6 +18,10 @@ def post_classification():
     if not user or not area:
         return jsonify({'message': 'area_id or user_id does not exist'}), 400
 
+    if not is_your(user.id):
+        return jsonify({'message': "Unauthorized action."}), 401
+
+
     classification = Classifications(healthy, disease)
     classification.user = user
     classification.area = area
@@ -36,7 +40,7 @@ def get_classifications():
 
     if classifications:
         result = classifications_schema.dump(classifications)
-        return jsonify({"message": "Sucessfully fetched", "data": result}), 201
+        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
     return jsonify({"message": "nothing found", "data":{}})
 
 def get_classification(id):
@@ -47,7 +51,7 @@ def get_classification(id):
             return jsonify({'message': "Unauthorized action."}), 401
 
         result = classification_schema.dump(classification)
-        return jsonify({"message": "Sucessfully fetched", "data": result})
+        return jsonify({"message": "Sucessfully fetched", "data": result}),200
     #se nao existir
     return jsonify({'message': "Classification don't exist", 'data': {}}), 404
 

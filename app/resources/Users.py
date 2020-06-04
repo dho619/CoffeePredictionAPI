@@ -17,7 +17,7 @@ def post_user():
     pass_hash = generate_password_hash(password)#criptografa a senha
     user = Users(email, pass_hash, name)
 
-    profile = Profiles.query.get(3) #buscando perfil comum
+    profile = Profiles.query.get(2) #buscando perfil comum
     user.profiles.append(profile) #adicionando perfil comum
     try:
         db.session.add(user)#adiciona
@@ -49,7 +49,7 @@ def update_user(id):
     try:
         db.session.commit()
         result = user_schema.dump(user)
-        return jsonify({'message': 'Sucessfully updated', 'data': result}), 201
+        return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
     except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o email
             return jsonify({'message': 'This email is already in use', 'data': {}}), 406
@@ -63,7 +63,7 @@ def get_users():
 
     if users:
         result = users_schema.dump(users)
-        return jsonify({"message": "Sucessfully fetched", "data": result}), 201
+        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
     return jsonify({"message": "nothing found", "data":{}})
 
 def get_user(id):
@@ -71,7 +71,7 @@ def get_user(id):
 
     if user:#se existir
         result = user_schema.dump(user)
-        return jsonify({"message": "Sucessfully fetched", "data": result})
+        return jsonify({"message": "Sucessfully fetched", "data": result}),200
     #se nao existir
     return jsonify({'message': "User don't exist", 'data': {}}), 404
 

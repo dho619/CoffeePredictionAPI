@@ -39,7 +39,7 @@ def update_profile(id):
     try:
         db.session.commit()
         result = profile_schema.dump(profile)
-        return jsonify({'message': 'Sucessfully updated', 'data': result}), 201
+        return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
     except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
@@ -53,7 +53,7 @@ def get_profiles():
 
     if profiles:
         result = profiles_schema.dump(profiles)
-        return jsonify({"message": "Sucessfully fetched", "data": result}), 201
+        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
     return jsonify({"message": "nothing found", "data":{}})
 
 def get_profile(id):
@@ -61,7 +61,7 @@ def get_profile(id):
 
     if profile:#se existir
         result = profile_schema.dump(profile)
-        return jsonify({"message": "Sucessfully fetched", "data": result})
+        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
     #se nao existir
     return jsonify({'message': "Profile don't exist", 'data': {}}), 404
 

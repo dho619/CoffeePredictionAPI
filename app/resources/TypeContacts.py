@@ -37,7 +37,7 @@ def update_typeContact(id):
     try:
         db.session.commit()
         result = typeContact_schema.dump(typeContact)
-        return jsonify({'message': 'Sucessfully updated', 'data': result}), 201
+        return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
     except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
@@ -51,7 +51,7 @@ def get_typeContacts():
 
     if typeContacts:
         result = typeContacts_schema.dump(typeContacts)
-        return jsonify({"message": "Sucessfully fetched", "data": result}), 201
+        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
     return jsonify({"message": "nothing found", "data":{}})
 
 def get_typeContact(id):

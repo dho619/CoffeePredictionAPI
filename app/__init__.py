@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
+import sys
+from .services.startDB import starting_DB
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -13,6 +15,11 @@ from .models import Users, Profiles, TypeContacts, Contacts, TypeAreas, Areas, C
 from .resources import Users
 #importando rotas
 from .routes import routes
+
+if len(sys.argv) > 1 and sys.argv[1].lower() == 'create_db':#se e primeira vez cria banco e preenche com dados
+    #passa tudo com paramentro, para evitar import circular
+    starting_DB(db, Users, Profiles, TypeAreas, TypeContacts)
+    sys.exit()
 
 if __name__ == '__main__':
     app.run()

@@ -38,7 +38,7 @@ def update_typeArea(id):
     try:
         db.session.commit()
         result = typeArea_schema.dump(typeArea)
-        return jsonify({'message': 'Sucessfully updated', 'data': result}), 201
+        return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
     except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
@@ -52,7 +52,7 @@ def get_typeAreas():
 
     if typeAreas:
         result = typeAreas_schema.dump(typeAreas)
-        return jsonify({"message": "Sucessfully fetched", "data": result}), 201
+        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
     return jsonify({"message": "nothing found", "data":{}})
 
 def get_typeArea(id):
@@ -60,7 +60,7 @@ def get_typeArea(id):
 
     if typeArea:#se existir
         result = typeArea_schema.dump(typeArea)
-        return jsonify({"message": "Sucessfully fetched", "data": result})
+        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
     #se nao existir
     return jsonify({'message': "TypeArea don't exist", 'data': {}}), 404
 

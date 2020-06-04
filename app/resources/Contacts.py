@@ -21,6 +21,9 @@ def post_contact():
     if not user or not typeContact:
         return jsonify({'message': 'type_contact_id or user_id does not exist'}), 400
 
+    if not is_your(user.id):
+        return jsonify({'message': "Unauthorized action."}), 401
+
     contact = Contacts(contact, description)
     contact.type_contact = typeContact
     contact.user = user
@@ -57,7 +60,7 @@ def update_contact(id):
     try:
         db.session.commit()
         result = contact_schema.dump(contact)
-        return jsonify({'message': 'Sucessfully updated', 'data': result}), 201
+        return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
     except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o contact
             return jsonify({'message': 'This contact is already in use', 'data': {}}), 406
@@ -73,23 +76,27 @@ def get_contacts():
 
     if contacts:
         result = contacts_schema.dump(contacts)
-        return jsonify({"message": "Sucessfully fetched", "data": result}), 201
+        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
     return jsonify({"message": "nothing found", "data":{}})
 
 def get_contact(id):
     contact = Contacts.query.get(id)#busca contact pelo id
 
     if contact:#se existir
-        print(contact.user_id)
         if not is_your(contact.user_id):#verifica se o contato e do usuario logado
             return jsonify({'message': "Unauthorized action."}), 401
         result = contact_schema.dump(contact)
-        return jsonify({"message": "Sucessfully fetched", "data": result})
+        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
     #se nao existir
     return jsonify({'message': "Contact don't exist", 'data': {}}), 404
 
 def delete_contact(id):
     contact = Contacts.query.get(id)#busca contact pelo id
+    '''
+    resgata o typeContact, pois estava gerando bug que um fk (o typeContact) tava
+    desatualizado(o que estava em cache) com o do banco, apenas tras para ele atualizar
+    '''
+    typeContact = TypeContacts.query.get(contact.type_contact_id)#busca contact pelo id
 
     if not contact:#se nao existir
         return jsonify({'message': "Contact don't exist", 'data': {}}), 404
@@ -102,5 +109,6 @@ def delete_contact(id):
         db.session.commit()
         result = contact_schema.dump(contact)
         return jsonify({"message": "Sucessfully deleted", "data": result}), 200
-    except:
+    except Exception as e:
+        print(e)
         return jsonify({"message": "Unable to deleted", "data": {}}), 500

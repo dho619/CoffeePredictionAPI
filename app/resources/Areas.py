@@ -21,6 +21,9 @@ def post_area():
     if not user or not type_area:
         return jsonify({'message': 'type_area_id or user_id does not exist'}), 400
 
+    if not is_your(user.id):
+        return jsonify({'message': "Unauthorized action."}), 401
+
     area = Areas(name, description, location)
     area.type_area = type_area
     area.user = user
@@ -56,7 +59,7 @@ def update_area(id):
     try:
         db.session.commit()
         result = area_schema.dump(area)
-        return jsonify({'message': 'Sucessfully updated', 'data': result}), 201
+        return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
     except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
@@ -80,7 +83,7 @@ def get_area(id):
         if not is_your(area.user_id):
             return jsonify({'message': "Unauthorized action."}), 401
         result = area_schema.dump(area)
-        return jsonify({"message": "Sucessfully fetched", "data": result})
+        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
     #se nao existir
     return jsonify({'message': "Profile don't exist", 'data': {}}), 404
 

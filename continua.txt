@@ -1,6 +1,3 @@
-******3 - pesquisar como lotiar banco automaticamente para testes
-******5 - adicionar perfis, tipo de area, tipos contatos e usuarios automaticamente
-
-7 - pytest criar testes automaticos
-
 ..| partiu ir pra criação mobile
+
+futuramente criar mais testes automáticos

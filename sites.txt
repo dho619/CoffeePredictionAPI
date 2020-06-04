@@ -1,2 +1,0 @@
-https://medium.com/@hedgarbezerra35/api-rest-com-flask-autenticacao-25d99b8679b6
-https://code.tutsplus.com/pt/tutorials/building-restful-apis-with-flask-diy--cms-26625
