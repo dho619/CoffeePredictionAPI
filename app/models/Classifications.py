@@ -3,6 +3,8 @@ from app import db, ma
 
 class Classifications(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(2000))
     healthy = db.Column(db.Boolean, nullable=False)
     disease = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
@@ -12,7 +14,9 @@ class Classifications(db.Model):
     user = db.relationship("Users", back_populates="classifications")
     area = db.relationship("Areas", back_populates="classifications")
 
-    def __init__(self, healthy, disease):
+    def __init__(self, name, description, healthy, disease):
+        self.name = name
+        self.description = description
         self.healthy = healthy
         self.disease = disease
 
@@ -22,7 +26,7 @@ class ClassificationSchema(ma.Schema):
     # area = ma.Nested('AreaSchema', many=False, exclude=('classifications',))
 
     class Meta:
-        fields = ('id', 'healthy', 'disease')
+        fields = ('id', 'name', 'description', 'healthy', 'disease')
 
 classification_schema = ClassificationSchema()
 classifications_schema = ClassificationSchema( many = True )

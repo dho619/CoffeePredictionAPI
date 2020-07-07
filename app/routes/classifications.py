@@ -19,6 +19,11 @@ def get_classification(id):
 def post_classification():
     return Classifications.post_classification()
 
+@app.route('/classifications/<id>', methods=['PUT'])
+@auth.login_required#estar logado
+def put_classification(id):
+    return Classifications.put_classification(id)
+
 @app.route('/classifications/<id>', methods=['DELETE'])
 @auth.login_required#estar logado
 def delete_classification(id):

@@ -54,7 +54,7 @@ def test_post_Area():
 def test_post_Classifications():
     response = requests.post(
                 'http://127.0.0.1:5000/classifications',
-                json = {"healthy": False, "disease": "Doença X", 	"user_id": 2, "area_id": 1 },
+                json = {"name": "Teste", "description": "Testando", "healthy": False, "disease": "Doença X", 	"user_id": 2, "area_id": 1 },
                 headers=headerComum
             )
     assert response.status_code == 201

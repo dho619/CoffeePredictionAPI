@@ -51,3 +51,12 @@ def test_put_TypeArea():
                 headers=headerAdmin
             )
     assert response.status_code == 200
+
+def test_put_Classifications():
+    response = requests.put(
+                'http://127.0.0.1:5000/classifications/1',
+                json = {'name':'Name atualizado'},
+                headers=headerComum
+            )
+    print(response)
+    assert response.status_code == 200

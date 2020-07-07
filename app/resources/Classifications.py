@@ -8,12 +8,14 @@ from ..services.auth import is_your
 def post_classification():
     #pegando os campos da requisicao
     try:
+        name = request.json['name']
+        description = request.json['description']
         healthy = request.json['healthy']
         disease = request.json['disease']
         user = Users.query.get(request.json['user_id'])
         area = Areas.query.get(request.json['area_id'])
     except:
-        return jsonify({'message': 'Expected healthy, disease, user_id and area_id'}), 400
+        return jsonify({'message': 'Expected name, description, healthy, disease, user_id and area_id'}), 400
 
     if not user or not area:
         return jsonify({'message': 'area_id or user_id does not exist'}), 400
@@ -22,7 +24,7 @@ def post_classification():
         return jsonify({'message': "Unauthorized action."}), 401
 
 
-    classification = Classifications(healthy, disease)
+    classification = Classifications(name, description, healthy, disease)
     classification.user = user
     classification.area = area
 
@@ -34,6 +36,28 @@ def post_classification():
     except Exception as e:
             print(e)
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
+
+
+def put_classification(id):
+    classification = Classifications.query.get(id)#procura o usuario pelo id
+
+    if not classification:#se nao existir o usuario
+        return jsonify({'message': "Classification don't exist", 'data': {}}), 404
+
+    #pegando os campos da requisicao
+    classification.name = request.json['name'] if 'name' in request.json else classification.name
+    classification.description = prequest.json['description'] if 'description' in request.json else classification.description
+
+    if not is_your(classification.user_id):
+        return jsonify({'message': "Unauthorized action."}), 401
+
+    try:
+        db.session.commit()
+        result = classification_schema.dump(classification)
+        return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
+    except:
+        return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
+
 
 def get_classifications():
     classifications = Classifications.query.all()#pega todos classifications
