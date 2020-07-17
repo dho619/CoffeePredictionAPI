@@ -2,7 +2,7 @@ import jwt, json
 from werkzeug.security import check_password_hash
 from datetime import datetime
 from app import app
-from ..models.Users import Users
+from ..models.Users import Users, user_schema
 from .gets import isAdmin
 
 #criar o token
@@ -13,7 +13,8 @@ def encode_auth_token(user):
             'iat': datetime.now(), #data de criacao
             'sub': user.id,
             'admin': isAdmin(user),
-            'name': user.name
+            'name': user.name,
+            'email': user.email
         }
         return jwt.encode(
             payload,
@@ -39,7 +40,6 @@ def login_Usuario(user_email, password):
         user = Users.query.filter_by(email=user_email).first()
     except Exception as e:
         user = None
-
     if user and check_password_hash(user.password, password):
         return encode_auth_token(user)
     else:

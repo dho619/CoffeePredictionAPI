@@ -22,7 +22,6 @@ def test_delete_Contacts():
                 'http://127.0.0.1:5000/contacts/1',
                 headers=headerComum
             )
-    print(response.text)
     assert response.status_code == 200
 
 def test_delete_Areas():

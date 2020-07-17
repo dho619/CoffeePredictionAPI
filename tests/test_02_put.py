@@ -58,5 +58,4 @@ def test_put_Classifications():
                 json = {'name':'Name atualizado'},
                 headers=headerComum
             )
-    print(response)
     assert response.status_code == 200

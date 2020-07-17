@@ -4,6 +4,7 @@ from sqlalchemy import exc
 from app import db
 from ..models.Users import Users, user_schema, users_schema
 from ..models.Profiles import Profiles
+from ..utils.login import encode_auth_token
 
 def post_user():
     #pegando os campos da requisicao
@@ -22,8 +23,11 @@ def post_user():
     try:
         db.session.add(user)#adiciona
         db.session.commit()# commit no banco
-        result = user_schema.dump(user)
-        return jsonify({'message': 'Sucessfully registered', 'data': result}), 201
+
+        token = encode_auth_token(user)
+
+
+        return jsonify({'message': 'Sucessfully registered', 'token': token}), 201
     except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o email
             return jsonify({'message': 'This email is already in use', 'data': {}}), 406

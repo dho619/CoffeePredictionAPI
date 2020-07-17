@@ -1,7 +1,6 @@
 from flask import jsonify, request
 from ..utils.login import login_Usuario
 
-
 def login():
     data = request.json#busca o json da requisicasso
     try:
