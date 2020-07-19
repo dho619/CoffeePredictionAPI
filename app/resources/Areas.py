@@ -11,7 +11,7 @@ def post_area():
     #pegando os campos da requisicao
     try:
         name = request.json['name']
-        description = request.json['description']
+        description = request.json['description'][:500]
         location = request.json['location']
         user = Users.query.get(request.json['user_id'])
         type_area = TypeAreas.query.get(request.json['type_area_id'])
@@ -27,16 +27,14 @@ def post_area():
     area = Areas(name, description, location)
     area.type_area = type_area
     area.user = user
+    print('aqui chegou')
     try:
         db.session.add(area)#adiciona
         db.session.commit()# commit no banco
         result = area_schema.dump(area)
         return jsonify({'message': 'Sucessfully registered', 'data': result}), 201
     except exc.IntegrityError as e:
-        if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
-            return jsonify({'message': 'This name is already in use', 'data': {}}), 406
-        else:
-            return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
+        return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
     except:
         return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 

@@ -3,8 +3,8 @@ from app import db, ma
 
 class Areas(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(100), nullable=False, unique=True)
-    description = db.Column(db.String(100))
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(500))
     location = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     type_area_id = db.Column(db.Integer, db.ForeignKey('type_areas.id'))
