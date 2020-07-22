@@ -28,7 +28,7 @@ class AreaSchema(ma.Schema):
     # user = ma.Nested('UserSchema', many=False, exclude=('areas',))
 
     class Meta:
-        fields = ('id', 'name', 'description', 'location', 'typeArea', 'classifications')
+        fields = ('id', 'name', 'description', 'location', 'type_area', 'user_id', 'classifications')
 
 area_schema = AreaSchema()
 areas_schema = AreaSchema( many = True )

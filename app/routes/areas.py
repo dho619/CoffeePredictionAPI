@@ -5,7 +5,6 @@ from ..services.auth import auth, is_admin
 
 @app.route('/areas', methods=['GET'])
 @auth.login_required#estar logado
-@is_admin#ser administrador
 def get_areas():
     return Areas.get_areas()
 

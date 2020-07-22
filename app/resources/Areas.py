@@ -4,8 +4,7 @@ from app import db
 from ..models.Areas import Areas, area_schema, areas_schema
 from ..models.Users import Users
 from ..models.TypeAreas import TypeAreas
-from ..services.auth import is_your
-
+from ..services.auth import is_your, token_user
 
 def post_area():
     #pegando os campos da requisicao
@@ -27,7 +26,6 @@ def post_area():
     area = Areas(name, description, location)
     area.type_area = type_area
     area.user = user
-    print('aqui chegou')
     try:
         db.session.add(area)#adiciona
         db.session.commit()# commit no banco
@@ -66,13 +64,18 @@ def update_area(id):
     except:
         return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
+#vai retornar tds areas do usuario logado.
 def get_areas():
-    areas = Areas.query.all()#pega todos areas
+    loggedUser = token_user()
+    if loggedUser['admin']: #se for o admin
+        areas = Areas.query.all()#pega todas areas
+    else: #se nao
+        areas = Areas.query.filter_by(user_id=loggedUser['id'])#pega apenas do usuario logado
 
     if areas:
         result = areas_schema.dump(areas)
         return jsonify({"message": "Sucessfully fetched", "data": result}), 201
-    return jsonify({"message": "nothing found", "data":{}})
+    return jsonify({"message": "nothing found", "data":{}}), 404
 
 def get_area(id):
     area = Areas.query.get(id)#busca area pelo id
@@ -83,13 +86,13 @@ def get_area(id):
         result = area_schema.dump(area)
         return jsonify({"message": "Sucessfully fetched", "data": result}), 200
     #se nao existir
-    return jsonify({'message': "Profile don't exist", 'data': {}}), 404
+    return jsonify({'message': "Area don't exist", 'data': {}}), 404
 
 def delete_area(id):
     area = Areas.query.get(id)#busca area pelo id
 
     if not area:#se nao existir
-        return jsonify({'message': "Profile don't exist", 'data': {}}), 404
+        return jsonify({'message': "Area don't exist", 'data': {}}), 404
 
     if not is_your(area.user_id):
         return jsonify({'message': "Unauthorized action."}), 401

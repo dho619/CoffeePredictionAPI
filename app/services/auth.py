@@ -34,3 +34,9 @@ def is_your(id):
         return False
     usuario = getUsuario({'id': auth.current_user})
     return usuario and (isAdmin(usuario) or usuario.id == int(id))
+
+#funcao que retorna o id do usario logado e se ele é admin
+def token_user():
+    usuario = getUsuario({'id': auth.current_user})
+    admin = isAdmin(usuario)
+    return {'admin': admin, 'id': auth.current_user}
