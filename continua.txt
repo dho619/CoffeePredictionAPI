@@ -1,3 +1,4 @@
-..| partiu ir pra criação mobile
+Ver como será salvo as imagens, por enquanto apenas até definir a forma correta, vou salvar como
+string mesmo.
 
 futuramente criar mais testes automáticos

@@ -5,6 +5,7 @@ class Classifications(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(2000))
+    image = db.Column(db.LargeBinary)
     healthy = db.Column(db.Boolean, nullable=False)
     disease = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
@@ -14,9 +15,10 @@ class Classifications(db.Model):
     user = db.relationship("Users", back_populates="classifications")
     area = db.relationship("Areas", back_populates="classifications")
 
-    def __init__(self, name, description, healthy, disease):
+    def __init__(self, name, description, image, healthy, disease):
         self.name = name
         self.description = description
+        self.image = image
         self.healthy = healthy
         self.disease = disease
 

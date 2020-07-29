@@ -4,14 +4,14 @@ from ..models.Classifications import Classifications, classification_schema, cla
 from ..models.Users import Users
 from ..models.Areas import Areas
 from ..services.auth import is_your
+from ..utils.classifications import classificationImage
 
 def post_classification():
     #pegando os campos da requisicao
     try:
         name = request.json['name']
         description = request.json['description']
-        healthy = request.json['healthy']
-        disease = request.json['disease']
+        imageBase64 = request.json['image']
         user = Users.query.get(request.json['user_id'])
         area = Areas.query.get(request.json['area_id'])
     except:
@@ -24,7 +24,9 @@ def post_classification():
         return jsonify({'message': "Unauthorized action."}), 401
 
 
-    classification = Classifications(name, description, healthy, disease)
+    image, healthy, disease = classificationImage(imageBase64)
+
+    classification = Classifications(name, description, image, healthy, disease)
     classification.user = user
     classification.area = area
 

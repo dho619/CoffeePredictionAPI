@@ -1,101 +1,101 @@
 import requests
-from .token import token_comum, token_admin
+from .token import token_comum, token_admin, baseURL
 headerComum = token_comum
 headerAdmin = token_admin
 def test_get_Profiles():
     response = requests.get(
-                'http://127.0.0.1:5000/profiles',
+                baseURL + 'profiles',
                 headers=headerComum
             )
     assert response.status_code == 200
 
 def test_get_Profile():
     response = requests.get(
-                'http://127.0.0.1:5000/profiles/1',
+                baseURL + 'profiles/1',
                 headers=headerComum
             )
     assert response.status_code == 200
 
 def test_get_Users():
     response = requests.get(
-                'http://127.0.0.1:5000/users',
+                baseURL + 'users',
                 headers=headerAdmin
             )
     assert response.status_code == 200
 
 def test_get_User():
     response = requests.get(
-                'http://127.0.0.1:5000/users/2',
+                baseURL + 'users/2',
                 headers=headerComum
             )
     assert response.status_code == 200
 
 def test_get_Contacts():
     response = requests.get(
-                'http://127.0.0.1:5000/contacts',
+                baseURL + 'contacts',
                 headers=headerAdmin
             )
     assert response.status_code == 200
 
 def test_get_Contact():
     response = requests.get(
-                'http://127.0.0.1:5000/contacts/1',
+                baseURL + 'contacts/1',
                 headers=headerComum
             )
     assert response.status_code == 200
 
 def test_get_TypeContacts():
     response = requests.get(
-                'http://127.0.0.1:5000/typeContacts',
+                baseURL + 'typeContacts',
                 headers=headerComum
             )
     assert response.status_code == 200
 
 def test_get_TypeContact():
     response = requests.get(
-                'http://127.0.0.1:5000/typeContacts/4',
+                baseURL + 'typeContacts/4',
                 headers=headerComum
             )
     assert response.status_code == 200
 
 def test_get_TypeAreas():
     response = requests.get(
-                'http://127.0.0.1:5000/typeAreas',
+                baseURL + 'typeAreas',
                 headers=headerComum
             )
     assert response.status_code == 200
 
-def test_get_TypeAreas():
+def test_get_TypeArea():
     response = requests.get(
-                'http://127.0.0.1:5000/typeAreas/4',
+                baseURL + 'typeAreas/4',
                 headers=headerComum
             )
     assert response.status_code == 200
 
 def test_get_Areas():
     response = requests.get(
-                'http://127.0.0.1:5000/areas',
+                baseURL + 'areas',
                 headers=headerAdmin
             )
-    assert response.status_code == 200
+    assert response.status_code == 201
 
-def test_get_Areas():
+def test_get_Area():
     response = requests.get(
-                'http://127.0.0.1:5000/areas/1',
+                baseURL + 'areas/1',
                 headers=headerComum
             )
     assert response.status_code == 200
 
-def test_get_Classification():
+def test_get_Classifications():
     response = requests.get(
-                'http://127.0.0.1:5000/classifications',
+                baseURL + 'classifications',
                 headers=headerAdmin
             )
     assert response.status_code == 200
 
 def test_get_Classification():
     response = requests.get(
-                'http://127.0.0.1:5000/classifications/1',
+                baseURL + 'classifications/1',
                 headers=headerComum
             )
     assert response.status_code == 200

@@ -100,7 +100,7 @@ def delete_area(id):
     try:
         db.session.delete(area)
         db.session.commit()
-        result = area_schema.dump(area)
-        return jsonify({"message": "Sucessfully deleted", "data": result}), 200
-    except:
+        return jsonify({"message": "Sucessfully deleted"}), 200
+    except Exception as error:
+        print(error)
         return jsonify({"message": "Unable to deleted", "data": {}}), 500
