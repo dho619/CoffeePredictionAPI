@@ -1,5 +1,5 @@
 import requests
-from .token import user, password, baseURL
+from .myToken import user, password, baseURL
 
 def test_createBank():
 

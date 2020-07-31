@@ -1,5 +1,5 @@
 import requests
-from .token import token_comum, token_admin, baseURL
+from .myToken import token_comum, token_admin, baseURL
 headerComum = token_comum
 headerAdmin = token_admin
 def test_get_Profiles():

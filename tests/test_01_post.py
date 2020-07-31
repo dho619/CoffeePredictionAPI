@@ -1,5 +1,6 @@
-import requests
-from .token import token_comum, token_admin, baseURL
+import requests, base64
+from PIL import Image
+from .myToken import token_comum, token_admin, baseURL
 headerComum = token_comum
 headerAdmin = token_admin
 
@@ -52,9 +53,12 @@ def test_post_Area():
     assert response.status_code == 201
 
 def test_post_Classifications():
+    img = Image.open('./tests/img/teste.jpg')
+    img_base64 = base64.b64encode(img.tobytes())
+    image = base64.b64decode(img_base64)
     response = requests.post(
                 baseURL + 'classifications',
-                json = {"name": "Teste", "description": "Testando", "image": "", 	"user_id": 2, "area_id": 1 },
+                json = {"name": "Teste", "description": "Testando", "image": img_base64, 	"user_id": 2, "area_id": 1 },
                 headers=headerComum
             )
     assert response.status_code == 201

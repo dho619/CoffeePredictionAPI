@@ -1,16 +1,22 @@
-import os
+from io import BytesIO
+from os import urandom
+from base64 import b64decode
+from datetime import datetime
+from PIL import Image
 
-def classificationImage(imageBase64):
-    if imageBase64 == '':
-        image = os.urandom(1)
-        healthy = True
-        disease = 'Nenhuma imagem passada'
+def classificationImage(img_base64):
+    if img_base64 == '':
+        image = ''
     else:
         try:
-            image = imageBase64.decode('base64')
-        except:
-            image = os.urandom(1)
-        healthy = False
-        disease = 'Teste'
-
-    return image, healthy, disease
+            image = b64decode(str(img_base64)) # decodifica a base64
+            fileName = str(datetime.now()) + '.jpg'#nome do arquivo
+            pathImg = './app/temp/' + fileName #caminho para salvar temporariamente
+            img = Image.open(BytesIO(image)) #transforma em um imagem do PIL
+            img.save(pathImg, 'jpeg') #salva a imagem
+        except Exception as e:
+            print(e)
+            image = ''
+    healthy = False
+    disease = 'Teste'
+    return urandom(1), healthy, disease

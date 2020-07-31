@@ -23,9 +23,8 @@ def post_classification():
     if not is_your(user.id):
         return jsonify({'message': "Unauthorized action."}), 401
 
-
+    # print(imageBase64)
     image, healthy, disease = classificationImage(imageBase64)
-
     classification = Classifications(name, description, image, healthy, disease)
     classification.user = user
     classification.area = area

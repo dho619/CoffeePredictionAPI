@@ -1,4 +1,3 @@
-Ver como será salvo as imagens, por enquanto apenas até definir a forma correta, vou salvar como
-string mesmo.
+Ver como guardar as imagens, o teste nao consegui fazer funcionar ainda tbm
 
 futuramente criar mais testes automáticos
