@@ -1,6 +1,7 @@
 import jwt, json
 from werkzeug.security import check_password_hash
 from datetime import datetime
+from flask import jsonify
 from app import app
 from ..models.Users import Users, user_schema
 from .gets import isAdmin
@@ -40,6 +41,7 @@ def login_Usuario(user_email, password):
         user = Users.query.filter_by(email=user_email).first()
     except Exception as e:
         user = None
+    print(type(user))
     if user and check_password_hash(user.password, password):
         return encode_auth_token(user)
     else:

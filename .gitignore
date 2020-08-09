@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 tests/token.py
 config.py
+app/temp/*.*
+app/temp

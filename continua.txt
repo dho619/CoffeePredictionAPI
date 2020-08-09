@@ -1,3 +1,2 @@
-Ver como guardar as imagens, o teste nao consegui fazer funcionar ainda tbm
 
 futuramente criar mais testes automáticos

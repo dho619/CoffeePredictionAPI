@@ -1,6 +1,7 @@
 from werkzeug.security import generate_password_hash
 from flask import request, jsonify
 from sqlalchemy import exc
+from datetime import datetime
 from app import db
 from ..models.Users import Users, user_schema, users_schema
 from ..models.Profiles import Profiles
@@ -49,6 +50,7 @@ def update_user(id):
     user.email = request.json['email'] if 'email' in request.json else user.email
     user.name = request.json['name'] if 'name' in request.json else user.name
     user.password = pass_hash if pass_hash != '' else user.password
+    user.updated_at = datetime.now(); 
 
     try:
         db.session.commit()
