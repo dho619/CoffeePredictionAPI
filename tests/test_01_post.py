@@ -1,3 +1,6 @@
+#TESTE DE CRIACAO DE REGISTROS NAS TABELAS
+#menos de classifications
+
 import requests, base64
 from PIL import Image
 from .myToken import token_comum, token_admin, baseURL
@@ -48,17 +51,6 @@ def test_post_Area():
     response = requests.post(
                 baseURL + 'areas',
                 json = {"name": "Minha Chacara 2", 	"description": "Essa é minha chacara que eu comprei com meu money", "location": "12349994499", 	"user_id": 2, "type_area_id": 1 },
-                headers=headerComum
-            )
-    assert response.status_code == 201
-
-def test_post_Classifications():
-    img = Image.open('./tests/img/teste.jpg')
-    img_base64 = base64.b64encode(img.tobytes())
-    image = base64.b64decode(img_base64)
-    response = requests.post(
-                baseURL + 'classifications',
-                json = {"name": "Teste", "description": "Testando", "image": img_base64, 	"user_id": 2, "area_id": 1 },
                 headers=headerComum
             )
     assert response.status_code == 201

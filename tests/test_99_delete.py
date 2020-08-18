@@ -1,3 +1,5 @@
+#TESTE DE DELECAO DE REGISTROS
+
 import requests
 from .myToken import token_comum, token_admin, baseURL
 headerComum = token_comum

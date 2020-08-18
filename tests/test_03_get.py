@@ -1,3 +1,5 @@
+# TESTE DE EXIBIR UM REGISTRO OU TODOS
+
 import requests
 from .myToken import token_comum, token_admin, baseURL
 headerComum = token_comum
@@ -82,20 +84,6 @@ def test_get_Areas():
 def test_get_Area():
     response = requests.get(
                 baseURL + 'areas/1',
-                headers=headerComum
-            )
-    assert response.status_code == 200
-
-def test_get_Classifications():
-    response = requests.get(
-                baseURL + 'classifications',
-                headers=headerAdmin
-            )
-    assert response.status_code == 200
-
-def test_get_Classification():
-    response = requests.get(
-                baseURL + 'classifications/1',
                 headers=headerComum
             )
     assert response.status_code == 200

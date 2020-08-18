@@ -1,2 +1,5 @@
+fazer o seeder dos demais campos, tem o de users ate agr, o email nao deu certo criar
+dar uma pesquisada extra
+
 
 futuramente criar mais testes automáticos

@@ -1,3 +1,5 @@
+# TESTE DE UPDATE DOS REGISTROS DAS TABELAS
+
 import requests
 from .myToken import token_comum, token_admin, baseURL
 headerComum = token_comum
@@ -49,13 +51,5 @@ def test_put_TypeArea():
                 baseURL + 'typeAreas/4',
                 json = {'description':'Name atualizado'},
                 headers=headerAdmin
-            )
-    assert response.status_code == 200
-
-def test_put_Classifications():
-    response = requests.put(
-                baseURL + 'classifications/1',
-                json = {'name':'Name atualizado'},
-                headers=headerComum
             )
     assert response.status_code == 200

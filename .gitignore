@@ -1,7 +1,7 @@
 __pycache__/
 */__pycache__/
 *.pyc
-tests/token.py
+tests/myToken.py
 config.py
 app/temp/*.*
 app/temp

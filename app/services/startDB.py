@@ -6,10 +6,10 @@ def starting_DB(db, Users, Profiles, TypeAreas, TypeContacts):
     db.create_all()
     print('..| Banco Criado!')
     print('..| Populando banco...')
-    create_profiles(db, Profiles)
-    create_users(db, Users, Profiles)
-    create_typeArea(db, TypeAreas)
-    create_typeContacts(db, TypeContacts)
+    # create_profiles(db, Profiles)
+    # create_users(db, Users, Profiles)
+    # create_typeArea(db, TypeAreas)
+    # create_typeContacts(db, TypeContacts)
     print('..| Banco Pronto para uso!')
 
 def create_profiles(db, Profiles):

@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
+from flask_seeder import FlaskSeeder
 import sys
 from .services.startDB import starting_DB
 
@@ -8,6 +9,8 @@ app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+seeder = FlaskSeeder()
+seeder.init_app(app, db)
 
 #importando models
 from .models import Users, Profiles, TypeContacts, Contacts, TypeAreas, Areas, Classifications

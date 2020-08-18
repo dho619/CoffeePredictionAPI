@@ -1,3 +1,5 @@
+#ROTA PARA CRIACAO DE BANCO PARA TESTE
+
 import requests
 from .myToken import user, password, baseURL
 
