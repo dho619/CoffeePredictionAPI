@@ -1,5 +1,5 @@
-fazer o seeder dos demais campos, tem o de users ate agr, o email nao deu certo criar
-dar uma pesquisada extra
-
+Seed feito para usuarios e areas, reformulado uma parte dos testes,
+ficando pendente a questão do email do usuarios no seed e questao da
+criacao do banco
 
 futuramente criar mais testes automáticos

@@ -1,6 +1,9 @@
 # CoffeePredictionAPI
 Api para o sistema distribuído do TCC, com foco em predição de doenças em folhas de café
 
+Flask seed run
+    Atualmente esta populando usuários e áreas para o usuário de id 2 "comum@comum.com", infelizmente o email não consegui criar um que funcionasse para inserção de diversos usuários
+
 
 Teste:
 
@@ -11,7 +14,7 @@ Teste:
 
 
     A pasta teste deve conter:
-        * myToken.py: Que contém os tokens e baseURL, atualmente também possui um user e password, mas pretendo tirá-lo do projeto.
+        * myToken.py: Que contém os tokens e baseURL
         * setup.*: Arquivos de configuração dos pytest
         * test_createBank: Para criar um banco de testes novo
         * test_01_post: testes de criação de registros, menos o de classifications
