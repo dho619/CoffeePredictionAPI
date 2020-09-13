@@ -4,7 +4,7 @@ from app import db, runsInTheBackground
 from ..models.Classifications import Classifications, classification_schema, classifications_schema
 from ..models.Users import Users
 from ..models.Areas import Areas
-from ..services.auth import is_your
+from ..services.auth import is_your, token_user
 from ..utils.classifications import classificationImage
 
 def post_classification():
@@ -63,8 +63,8 @@ def put_classification(id):
 
 
 def get_classifications():
-    classifications = Classifications.query.all()
-
+    loggedUser = token_user()
+    classifications = Classifications.query.filter_by(user_id=loggedUser['id']).order_by(Classifications.created_at.desc())
     if classifications:
         result = classifications_schema.dump(classifications)
         return jsonify({"message": "Sucessfully fetched", "data": result}), 200

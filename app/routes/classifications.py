@@ -5,7 +5,6 @@ from ..services.auth import auth, is_admin
 
 @app.route('/classifications', methods=['GET'])
 @auth.login_required#estar logado
-@is_admin#ser administrador
 def get_classifications():
     return Classifications.get_classifications()
 

@@ -25,10 +25,10 @@ class Classifications(db.Model):
 #Definindo o Schema do Marshmallow para facilitar a utilização de JSON
 class ClassificationSchema(ma.Schema):
     # user = ma.Nested('UserSchema', many=False, exclude=('classifications',))
-    # area = ma.Nested('AreaSchema', many=False, exclude=('classifications',))
+    area = ma.Nested('AreaSchema', many=False, exclude=('classifications',))
 
     class Meta:
-        fields = ('id', 'name', 'description', 'healthy', 'disease')
+        fields = ( 'area', 'id', 'name', 'description', 'healthy', 'disease', 'created_at')
 
 classification_schema = ClassificationSchema()
 classifications_schema = ClassificationSchema( many = True )

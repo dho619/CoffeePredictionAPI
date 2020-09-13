@@ -67,10 +67,7 @@ def update_area(id):
 #vai retornar tds areas do usuario logado.
 def get_areas():
     loggedUser = token_user()
-    if loggedUser['admin']: #se for o admin
-        areas = Areas.query.all()#pega todas areas
-    else: #se nao
-        areas = Areas.query.filter_by(user_id=loggedUser['id'])#pega apenas do usuario logado
+    areas = Areas.query.filter_by(user_id=loggedUser['id'])#pega apenas do usuario logado
 
     if areas:
         result = areas_schema.dump(areas)
