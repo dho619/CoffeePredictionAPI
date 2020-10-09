@@ -21,9 +21,9 @@ def create_profiles(db, Profiles):
 def create_users(db, Users, Profiles):
     admin = Users.Users('admin@admin.com', generate_password_hash('123'), 'admin')
     comum = Users.Users('comum@comum.com', generate_password_hash('123'), 'comum')
-    profile = Profiles.Profiles.query.get(1) #buscando perfil admin
+    profile = Profiles.Profiles.query.filter_by(name = 'admin').first() #buscando perfil admin
     admin.profiles.append(profile) #adicionando perfil admin
-    profile = Profiles.Profiles.query.get(2) #buscando perfil comum
+    profile = Profiles.Profiles.query.filter_by(name = 'comum').first() #buscando perfil comum
     comum.profiles.append(profile) #adicionando perfil comum
     db.session.add_all([admin, comum])
     db.session.commit()

@@ -1,13 +1,16 @@
 import datetime
+
 from app import db, ma
+from ..utils.guid import create_guid
 
 class Areas(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    # id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.String(37), primary_key=True, default=create_guid, unique=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(500))
     location = db.Column(db.String(100))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    type_area_id = db.Column(db.Integer, db.ForeignKey('type_areas.id'))
+    user_id = db.Column(db.String(32), db.ForeignKey('users.id'))
+    type_area_id = db.Column(db.String(32), db.ForeignKey('type_areas.id'))
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now())
 

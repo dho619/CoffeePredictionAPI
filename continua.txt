@@ -1,3 +1,9 @@
+1 - Mudar a estrutura do banco, o banco irá guardar a string do local que esta a imagem apenas
+2 - O serviço para classificar imagem será rodado por um programa a parte, que rodará automaticamente de x e x tempos
+
+
+
+
 Seed feito para usuarios e areas, reformulado uma parte dos testes,
 ficando pendente a questão do email do usuarios no seed e questao da
 criacao do banco

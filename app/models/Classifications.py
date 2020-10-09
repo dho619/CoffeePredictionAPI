@@ -1,16 +1,18 @@
 import datetime
 from app import db, ma
+from ..utils.guid import create_guid
 
 class Classifications(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    # id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.String(37), primary_key=True, default=create_guid, unique=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(2000))
     image = db.Column(db.LargeBinary)
     healthy = db.Column(db.Boolean, nullable=False)
     disease = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    area_id = db.Column(db.Integer, db.ForeignKey('areas.id'))
+    user_id = db.Column(db.String(32), db.ForeignKey('users.id'))
+    area_id = db.Column(db.String(32), db.ForeignKey('areas.id'))
 
     user = db.relationship("Users", back_populates="classifications")
     area = db.relationship("Areas", back_populates="classifications")

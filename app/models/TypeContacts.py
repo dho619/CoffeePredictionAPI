@@ -1,8 +1,11 @@
 import datetime
+
 from app import db, ma
+from ..utils.guid import create_guid
 
 class TypeContacts(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    # id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.String(37), primary_key=True, default=create_guid, unique=True, nullable=False)
     name = db.Column(db.String(20), unique=True, nullable=False)
     description = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
