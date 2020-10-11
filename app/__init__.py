@@ -1,17 +1,14 @@
 from flask import Flask
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
-from flask_seeder import FlaskSeeder
 from flask_executor import Executor
 import sys
 from .services.startDB import starting_DB
 
 app = Flask(__name__)
-app.config.from_object('config')
+app.config.from_object('config_app')
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
-seeder = FlaskSeeder()
-seeder.init_app(app, db)
 
 runsInTheBackground = Executor(app) #trabalhar background em processos demorados
 

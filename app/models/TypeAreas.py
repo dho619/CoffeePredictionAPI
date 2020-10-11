@@ -1,9 +1,8 @@
 import datetime
 from app import db, ma
-from ..utils.guid import create_guid
+from ..utils.generalFunctions import create_guid
 
 class TypeAreas(db.Model):
-    # id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id = db.Column(db.String(37), primary_key=True, default=create_guid, unique=True, nullable=False)
     name = db.Column(db.String(20), unique=True, nullable=False)
     description = db.Column(db.String(100))
@@ -16,9 +15,7 @@ class TypeAreas(db.Model):
         self.name = name
         self.description = description
 
-#Definindo o Schema do Marshmallow para facilitar a utilização de JSON
 class TypeAreaSchema(ma.Schema):
-    # areas = ma.Nested('AreaSchema', many=True, exclude=('type_area',))
     class Meta:
         fields = ('id', 'name', 'description')
 

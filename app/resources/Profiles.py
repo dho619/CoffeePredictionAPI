@@ -4,7 +4,6 @@ from app import db
 from ..models.Profiles import Profiles, profile_schema, profiles_schema
 
 def post_profile():
-    #pegando os campos da requisicao
     try:
         name = request.json['name']
         description = request.json['description']
@@ -14,12 +13,12 @@ def post_profile():
 
     profile = Profiles(name, description)
     try:
-        db.session.add(profile)#adiciona
-        db.session.commit()# commit no banco
+        db.session.add(profile)
+        db.session.commit()
         result = profile_schema.dump(profile)
         return jsonify({'message': 'Sucessfully registered', 'data': result}), 201
     except exc.IntegrityError as e:
-        if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
+        if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
         else:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
@@ -27,12 +26,11 @@ def post_profile():
         return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
 def update_profile(id):
-    profile = Profiles.query.get(id)#procura o profile pelo id
+    profile = Profiles.query.get(id)
 
-    if not profile:#se nao existir o profile
+    if not profile:
         return jsonify({'message': "Profile don't exist", 'data': {}}), 404
 
-    #substitui ou mantem os campos
     profile.name = request.json['name'] if 'name' in request.json else profile.name
     profile.description = request.json['description'] if 'description' in request.json else profile.description
 
@@ -41,7 +39,7 @@ def update_profile(id):
         result = profile_schema.dump(profile)
         return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
     except exc.IntegrityError as e:
-        if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
+        if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
         else:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
@@ -49,7 +47,7 @@ def update_profile(id):
         return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
 def get_profiles():
-    profiles = Profiles.query.all()#pega todos profiles
+    profiles = Profiles.query.all()
 
     if profiles:
         result = profiles_schema.dump(profiles)
@@ -57,18 +55,18 @@ def get_profiles():
     return jsonify({"message": "nothing found", "data":{}})
 
 def get_profile(id):
-    profile = Profiles.query.get(id)#busca profile pelo id
+    profile = Profiles.query.get(id)
 
-    if profile:#se existir
+    if profile:
         result = profile_schema.dump(profile)
         return jsonify({"message": "Sucessfully fetched", "data": result}), 200
-    #se nao existir
+
     return jsonify({'message': "Profile don't exist", 'data': {}}), 404
 
 def delete_profile(id):
-    profile = Profiles.query.get(id)#busca profile pelo id
+    profile = Profiles.query.get(id)
 
-    if not profile:#se nao existir
+    if not profile:
         return jsonify({'message': "Profile don't exist", 'data': {}}), 404
 
     try:

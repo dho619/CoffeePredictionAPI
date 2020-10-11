@@ -4,16 +4,16 @@ from datetime import datetime
 from flask import jsonify
 from app import app
 from ..models.Users import Users, user_schema
-from .gets import isAdmin
+from ..utils.gets import get_profile_by_user
 
-#criar o token
 def encode_auth_token(user):
     try:
+        print(get_profile_by_user(user))
         payload = {
             #'exp': datetime.now() + timedelta(days=3), #valido por tres dias
-            'iat': datetime.now(), #data de criacao
+            'iat': datetime.now(),
             'sub': user.id,
-            'admin': isAdmin(user),
+            'admin': get_profile_by_user(user) == 'admin',
             'name': user.name,
             'email': user.email
         }
@@ -26,7 +26,6 @@ def encode_auth_token(user):
         # print(e)
         return None
 
-#Transformar o token e dicionario denovo
 def decode_auth_token(auth_token):
     try:
         payload = jwt.decode(auth_token, app.config['SECRET_KEY'])
@@ -34,14 +33,12 @@ def decode_auth_token(auth_token):
     except Exception as e:
         return None
 
-#Faz as validações de usuario e retorna o token
 def login_Usuario(user_email, password):
     user_email = user_email.lower()
     try:
         user = Users.query.filter_by(email=user_email).first()
     except Exception as e:
         user = None
-    print(type(user))
     if user and check_password_hash(user.password, password):
         return encode_auth_token(user)
     else:

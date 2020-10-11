@@ -7,7 +7,6 @@ from ..models.Users import Users
 from ..services.auth import is_your
 
 def post_contact():
-    #pegando os campos da requisicao
     try:
         contact = request.json['contact']
         description = request.json['description']
@@ -28,12 +27,12 @@ def post_contact():
     contact.type_contact = typeContact
     contact.user = user
     try:
-        db.session.add(contact)#adiciona
-        db.session.commit()# commit no banco
+        db.session.add(contact)
+        db.session.commit()
         result = contact_schema.dump(contact)
         return jsonify({'message': 'Sucessfully registered', 'data': result}), 201
     except exc.IntegrityError as e:
-        if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o contact
+        if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This contact is already in use', 'data': {}}), 406
         else:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
@@ -41,9 +40,9 @@ def post_contact():
         return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
 def update_contact(id):
-    contact = Contacts.query.get(id)#procura o contact pelo id
+    contact = Contacts.query.get(id)
 
-    if not contact:#se nao existir o contact
+    if not contact:
         return jsonify({'message': "Contact don't exist", 'data': {}}), 404
 
     if not is_your(contact.user_id):
@@ -53,7 +52,6 @@ def update_contact(id):
         typeContact = TypeContacts.query.get(request.json['type_contact_id'])
 
 
-    #substitui ou mantem os campos
     contact.description = request.json['description'] if 'description' in request.json else contact.description
     contact.type_contact = typeContacts.query.get(request.json['type_contact_id']) if 'type_contact_id' in request.json else contact.type_contact
 
@@ -62,7 +60,7 @@ def update_contact(id):
         result = contact_schema.dump(contact)
         return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
     except exc.IntegrityError as e:
-        if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o contact
+        if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This contact is already in use', 'data': {}}), 406
         else:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
@@ -72,7 +70,7 @@ def update_contact(id):
 
 
 def get_contacts():
-    contacts = Contacts.query.all()#pega todos contacts
+    contacts = Contacts.query.all()
 
     if contacts:
         result = contacts_schema.dump(contacts)
@@ -80,10 +78,10 @@ def get_contacts():
     return jsonify({"message": "nothing found", "data":{}})
 
 def get_contact(id):
-    contact = Contacts.query.get(id)#busca contact pelo id
+    contact = Contacts.query.get(id)
 
-    if contact:#se existir
-        if not is_your(contact.user_id):#verifica se o contato e do usuario logado
+    if contact:
+        if not is_your(contact.user_id):
             return jsonify({'message': "Unauthorized action."}), 401
         result = contact_schema.dump(contact)
         return jsonify({"message": "Sucessfully fetched", "data": result}), 200
@@ -91,17 +89,17 @@ def get_contact(id):
     return jsonify({'message': "Contact don't exist", 'data': {}}), 404
 
 def delete_contact(id):
-    contact = Contacts.query.get(id)#busca contact pelo id
+    contact = Contacts.query.get(id)
     '''
     resgata o typeContact, pois estava gerando bug que um fk (o typeContact) tava
     desatualizado(o que estava em cache) com o do banco, apenas tras para ele atualizar
     '''
-    typeContact = TypeContacts.query.get(contact.type_contact_id)#busca contact pelo id
+    typeContact = TypeContacts.query.get(contact.type_contact_id)
 
-    if not contact:#se nao existir
+    if not contact:
         return jsonify({'message': "Contact don't exist", 'data': {}}), 404
 
-    if not is_your(contact.user_id):#verifica se o contato e do usuario logado
+    if not is_your(contact.user_id):
         return jsonify({'message': "Unauthorized action."}), 401
 
     try:

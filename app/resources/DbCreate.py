@@ -4,11 +4,9 @@ from ..models import Users, Profiles, TypeAreas, TypeContacts
 from ..services.startDB import starting_DB
 
 def create():
-    try:
-        if not ('TCC_test' in str(db.engine)):
-            return jsonify({'message': 'Unauthorized, delete non-test database.'}), 401
-    except:
-        return jsonify({'message': 'Unauthorized, admin-only access.'}), 401
+
+    if not ('TCC_test' in str(db.engine)):
+        return jsonify({'message': 'Unauthorized, delete non-test database.'}), 401
 
     try:
         starting_DB(db, Users, Profiles, TypeAreas, TypeContacts)

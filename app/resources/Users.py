@@ -8,7 +8,6 @@ from ..models.Profiles import Profiles
 from ..utils.login import encode_auth_token
 
 def post_user():
-    #pegando os campos da requisicao
     try:
         email = request.json['email']
         password = request.json['password']
@@ -16,21 +15,20 @@ def post_user():
     except:
         return jsonify({'message': 'Expected name, email and password'}), 400
 
-    pass_hash = generate_password_hash(password)#criptografa a senha
+    pass_hash = generate_password_hash(password)
     user = Users(email, pass_hash, name)
 
-    profile = Profiles.query.get(2) #buscando perfil comum
-    user.profiles.append(profile) #adicionando perfil comum
+    profileUser = Profiles.query.filter_by(name == 'user').first()
+    user.profile = profile
     try:
-        db.session.add(user)#adiciona
-        db.session.commit()# commit no banco
+        db.session.add(user)
+        db.session.commit()
 
         token = encode_auth_token(user)
 
-
         return jsonify({'message': 'Sucessfully registered', 'token': token}), 201
     except exc.IntegrityError as e:
-        if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o email
+        if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This email is already in use', 'data': {}}), 406
         else:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
@@ -39,25 +37,24 @@ def post_user():
 
 
 def update_user(id):
-    user = Users.query.get(id)#procura o usuario pelo id
+    user = Users.query.get(id)
 
-    if not user:#se nao existir o usuario
+    if not user:
         return jsonify({'message': "User don't exist", 'data': {}}), 404
 
     pass_hash = generate_password_hash(request.json['password']) if 'password' in request.json else ''
 
-    #substitui ou mantem os campos
     user.email = request.json['email'] if 'email' in request.json else user.email
     user.name = request.json['name'] if 'name' in request.json else user.name
     user.password = pass_hash if pass_hash != '' else user.password
-    user.updated_at = datetime.now(); 
+    user.updated_at = datetime.now();
 
     try:
         db.session.commit()
         result = user_schema.dump(user)
         return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
     except exc.IntegrityError as e:
-        if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o email
+        if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This email is already in use', 'data': {}}), 406
         else:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
@@ -65,7 +62,7 @@ def update_user(id):
         return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
 def get_users():
-    users = Users.query.all()#pega todos usuarios
+    users = Users.query.all()
 
     if users:
         result = users_schema.dump(users)
@@ -73,18 +70,17 @@ def get_users():
     return jsonify({"message": "nothing found", "data":{}})
 
 def get_user(id):
-    user = Users.query.get(id)#busca usuario pelo id
+    user = Users.query.get(id)
 
-    if user:#se existir
+    if user:
         result = user_schema.dump(user)
         return jsonify({"message": "Sucessfully fetched", "data": result}),200
-    #se nao existir
     return jsonify({'message': "User don't exist", 'data': {}}), 404
 
 def delete_user(id):
-    user = Users.query.get(id)#busca usuario pelo id
+    user = Users.query.get(id)
 
-    if not user:#se nao existir
+    if not user:
         return jsonify({'message': "User don't exist", 'data': {}}), 404
 
     try:

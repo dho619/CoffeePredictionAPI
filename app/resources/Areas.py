@@ -7,7 +7,6 @@ from ..models.TypeAreas import TypeAreas
 from ..services.auth import is_your, token_user
 
 def post_area():
-    #pegando os campos da requisicao
     try:
         name = request.json['name']
         description = request.json['description'][:500]
@@ -27,8 +26,8 @@ def post_area():
     area.type_area = type_area
     area.user = user
     try:
-        db.session.add(area)#adiciona
-        db.session.commit()# commit no banco
+        db.session.add(area)
+        db.session.commit()
         result = area_schema.dump(area)
         return jsonify({'message': 'Sucessfully registered', 'data': result}), 201
     except exc.IntegrityError as e:
@@ -38,15 +37,14 @@ def post_area():
 
 
 def update_area(id):
-    area = Areas.query.get(id)#procura o area pelo id
+    area = Areas.query.get(id)
 
-    if not area:#se nao existir o area
+    if not area:
         return jsonify({'message': "Profile don't exist", 'data': {}}), 404
 
     if not is_your(area.user_id):
         return jsonify({'message': "Unauthorized action."}), 401
 
-    #substitui ou mantem os campos
     area.name = request.json['name'] if 'name' in request.json else area.name
     area.description = request.json['description'] if 'description' in request.json else area.description
     area.location = request.json['location'] if 'location' in request.json else area.location
@@ -57,17 +55,16 @@ def update_area(id):
         result = area_schema.dump(area)
         return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
     except exc.IntegrityError as e:
-        if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
+        if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
         else:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
     except:
         return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
-#vai retornar tds areas do usuario logado.
 def get_areas():
     loggedUser = token_user()
-    areas = Areas.query.filter_by(user_id=loggedUser['id'])#pega apenas do usuario logado
+    areas = Areas.query.filter_by(user_id=loggedUser['id'])
 
     if areas:
         result = areas_schema.dump(areas)
@@ -75,20 +72,20 @@ def get_areas():
     return jsonify({"message": "nothing found", "data":{}}), 404
 
 def get_area(id):
-    area = Areas.query.get(id)#busca area pelo id
+    area = Areas.query.get(id)
 
-    if area:#se existir
+    if area:
         if not is_your(area.user_id):
             return jsonify({'message': "Unauthorized action."}), 401
         result = area_schema.dump(area)
         return jsonify({"message": "Sucessfully fetched", "data": result}), 200
-    #se nao existir
+
     return jsonify({'message': "Area don't exist", 'data': {}}), 404
 
 def delete_area(id):
-    area = Areas.query.get(id)#busca area pelo id
+    area = Areas.query.get(id)
 
-    if not area:#se nao existir
+    if not area:
         return jsonify({'message': "Area don't exist", 'data': {}}), 404
 
     if not is_your(area.user_id):

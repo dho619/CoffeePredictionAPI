@@ -1,7 +1,7 @@
 #ROTA PARA CRIACAO DE BANCO PARA TESTE
 
 import requests
-from .myToken import token_admin, baseURL
+from .config_tests import token_admin, baseURL
 
 headerAdmin = token_admin
 

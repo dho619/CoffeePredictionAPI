@@ -2,7 +2,7 @@ from flask import jsonify
 from flask_httpauth import HTTPTokenAuth
 from functools import wraps
 from ..utils.login import decode_auth_token
-from ..utils.gets import getUsuario, isAdmin
+from ..utils.gets import get_user_by_email_or_id, get_profile_by_user
 
 auth = HTTPTokenAuth(scheme='Bearer')
 
@@ -12,7 +12,7 @@ def user_logged(token):
     if not user:
         return False
     try:
-        auth.current_user = user['sub']#id do usuario logado
+        auth.current_user = user['sub']
         return True
     except:
         return False
@@ -22,7 +22,7 @@ def user_logged(token):
 def is_admin(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        if isAdmin(getUsuario({'id': auth.current_user})):#pega o usuario e manda pro is Admin que retorna se e admin
+        if get_profile_by_user(get_user_by_email_or_id({'id': auth.current_user})) == 'admin':
             return f(*args, **kwargs)
         return jsonify({'message': "Unauthorized, admin-only access."}), 401
     return wrapper
@@ -32,11 +32,12 @@ def is_admin(f):
 def is_your(id):
     if id == None:
         return False
-    usuario = getUsuario({'id': auth.current_user})
-    return usuario and (isAdmin(usuario) or usuario.id == int(id))
+    user = get_user_by_email_or_id({'id': auth.current_user})
+    isAdmin = get_profile_by_user(user) == 'admin'
+    return user and (isAdmin or user.id == id)
 
 #funcao que retorna o id do usario logado e se ele é admin
 def token_user():
-    usuario = getUsuario({'id': auth.current_user})
-    admin = isAdmin(usuario)
-    return {'admin': admin, 'id': auth.current_user}
+    user = get_user_by_email_or_id({'id': auth.current_user})
+    isAdmin = get_profile_by_user(user) == 'admin'
+    return {'admin': isAdmin, 'id': auth.current_user}

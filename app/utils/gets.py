@@ -1,23 +1,26 @@
 from ..models.Users import Users
+from ..models.Profiles import Profiles
 
-def getUsuario(args):
+def get_user_by_email_or_id(args):
     if not('id' in args or 'email' in args):
         return None
 
     result = []
 
-    #filtrando de acordo se for id ou email
     if 'id' in args:
         try:
-            id = int(args['id'])
+            id = args['id']
         except:
             return None
-        result = Users.query.get(id)#busca usuario pelo id
+        result = Users.query.get(id)
     elif 'email' in args:
-        user = Users.query.filter_by(email=args['email']).first()#busca usuario pelo email
+        user = Users.query.filter_by(email=args['email']).first()
 
     return result
 
-def isAdmin(user):
-    admin = [profile for profile in user.profiles if profile.name == 'admin']#adiciona se for perfil admin
-    return len(admin) > 0
+def get_profile_by_user(user):
+    if not user:
+        return None
+
+    profile = Profiles.query.filter_by(id=user.profile_id).first()
+    return profile.name.lower

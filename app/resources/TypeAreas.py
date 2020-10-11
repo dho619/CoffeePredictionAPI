@@ -4,7 +4,6 @@ from app import db
 from ..models.TypeAreas import TypeAreas, typeArea_schema, typeAreas_schema
 
 def post_typeArea():
-    #pegando os campos da requisicao
     try:
         name = request.json['name']
         description = request.json['description']
@@ -13,12 +12,12 @@ def post_typeArea():
 
     typeArea = TypeAreas(name, description)
     try:
-        db.session.add(typeArea)#adiciona
-        db.session.commit()# commit no banco
+        db.session.add(typeArea)
+        db.session.commit()
         result = typeArea_schema.dump(typeArea)
         return jsonify({'message': 'Sucessfully registered', 'data': result}), 201
     except exc.IntegrityError as e:
-        if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
+        if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
         else:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
@@ -26,12 +25,11 @@ def post_typeArea():
         return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
 def update_typeArea(id):
-    typeArea = TypeAreas.query.get(id)#procura o typeArea pelo id
+    typeArea = TypeAreas.query.get(id)
 
-    if not typeArea:#se nao existir o typeArea
+    if not typeArea:
         return jsonify({'message': "TypeArea don't exist", 'data': {}}), 404
 
-    #substitui ou mantem os campos
     typeArea.name = request.json['name'] if 'name' in request.json else typeArea.name
     typeArea.description = request.json['description'] if 'description' in request.json else typeArea.description
 
@@ -40,7 +38,7 @@ def update_typeArea(id):
         result = typeArea_schema.dump(typeArea)
         return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
     except exc.IntegrityError as e:
-        if 'Duplicate entry' in e.orig.args[1]:#se isso for true, significa que teve duplicida e nesse caso so pode ser o name
+        if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
         else:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
@@ -48,7 +46,7 @@ def update_typeArea(id):
         return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
 def get_typeAreas():
-    typeAreas = TypeAreas.query.all()#pega todos typeAreas
+    typeAreas = TypeAreas.query.all()
 
     if typeAreas:
         result = typeAreas_schema.dump(typeAreas)
@@ -56,18 +54,18 @@ def get_typeAreas():
     return jsonify({"message": "nothing found", "data":{}})
 
 def get_typeArea(id):
-    typeArea = TypeAreas.query.get(id)#busca typeArea pelo id
+    typeArea = TypeAreas.query.get(id)
 
-    if typeArea:#se existir
+    if typeArea:
         result = typeArea_schema.dump(typeArea)
         return jsonify({"message": "Sucessfully fetched", "data": result}), 200
-    #se nao existir
+
     return jsonify({'message': "TypeArea don't exist", 'data': {}}), 404
 
 def delete_typeArea(id):
-    typeArea = TypeAreas.query.get(id)#busca typeArea pelo id
+    typeArea = TypeAreas.query.get(id)
 
-    if not typeArea:#se nao existir
+    if not typeArea:
         return jsonify({'message': "TypeArea don't exist", 'data': {}}), 404
 
     try:
