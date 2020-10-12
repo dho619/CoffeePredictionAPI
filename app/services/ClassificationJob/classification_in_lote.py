@@ -1,10 +1,9 @@
-import requests
+import requests, sys, cv2
 from datetime import datetime
 from pathlib import Path
 from PIL import Image
-from cv2 import resize, cvtColor, COLOR_RGB2BGR
 from pickle import load
-from numpy import array
+import numpy as np
 
 import mysql.connector
 
@@ -14,21 +13,20 @@ config = {
   'password':'1.618_3,14',
   'database':'TCC_development'
 }
+try:
+    conn = mysql.connector.connect(**config)
+except Exception as e:
+    print('Erro durante a conexão com o banco de dados')
+    print('Erro:')
+    print(e)
+    sys.exit()
 
-conn = mysql.connector.connect(**config)
-
-def search_pending_classification():
-    cursor = conn.cursor()
-    cursor.execute("SELECT id, image_path FROM classifications WHERE is_processed = false;")
-    rows = cursor.fetchall()
-
-    ids = []
-    path_Images = []
-    for row in rows:
-        ids.append(row[0])
-        path_Images.append(row[1])
-    cursor.close()
-    return ids, path_Images
+ids_classifications = []
+path_images = []
+images = []
+pre_processed_images = np.array([])
+predictions = []
+classification_results = []
 
 def diseaseDictionary(num):
     disease = ''
@@ -40,42 +38,91 @@ def diseaseDictionary(num):
         disease = 'Outras'
         return disease
 
-def pre_processing(img):
-    imgResized = resize(cvtColor(array(img), COLOR_RGB2BGR), (200, 200))
-    imgArray = imgResized.flatten()
-    preProcessingImage = array([imgArray])
-    return preProcessingImage
+def search_pending_classification():
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, image_path FROM classifications WHERE is_processed = false;")
+        rows = cursor.fetchall()
+    except:
+        print('Erro durante a busca de classificações pedentes!')
 
+    for row in rows:
+        ids_classifications.append(row[0])
+        path_images.append(row[1])
+    cursor.close()
 
-def randon_forest_classification(image):
-    arquivoRNA = open('/home/dho/Documentos/CoffeePredictionAPI/app/services/ClassificationJob/redeRF.p', 'rb')
-    randonForest = load(arquivoRNA)
-    arquivoRNA.close()
+def load_images():
+    for i, path_image in enumerate(path_images):
+        try:
+            image = frame = cv2.imread(path_image)
+            images.append(image)
+        except Exception as e:
+            print('Erro ao carregar imagem {}, localizada em: {}'.format(ids_classifications[i], path_image))
+            print('Erro:')
+            print(e)
 
-    preProcessingImage = pre_processing(image)
-    predict = randonForest.predict(preProcessingImage)
-    return diseaseDictionary(predict[0])
+def pre_processing_images():
+    global pre_processed_images
+    array_images = []
+    for image in images:
+        imgResized = cv2.resize(cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR), (200, 200))
+        imgArray = imgResized.flatten()
+        array_images.append(imgArray)
+    pre_processed_images = np.array(array_images)
 
-def update_classification_register(id, healthy, disease):
+def randon_forest_classification():
+    global predictions
+    try:
+        arquivoRNA = open('/home/dho/Documentos/CoffeePredictionAPI/app/services/ClassificationJob/redeRF.p', 'rb')
+        randonForest = load(arquivoRNA)
+        arquivoRNA.close()
+        predictions = randonForest.predict(pre_processed_images)
+    except Exception as e:
+        print('Erro durante a classificação!')
+        print('Erro:')
+        print(e)
+
+def labeling_classifications():
+    for predict in predictions:
+        classification_results.append(diseaseDictionary(predict))
+
+def update_classification_register():
     cursor = conn.cursor()
-    sql = "UPDATE classifications SET healthy = %s, disease = %s,"
-    sql += "is_processed = true, updated_at = %s WHERE id = %s;"
+    for i, classification in enumerate(classification_results):
+        healthy = classification == 'Saudável'
 
-    cursor.execute(sql, (healthy, disease, datetime.now(), id))
-    conn.commit()
+        sql = "UPDATE classifications SET healthy = %s, disease = %s,"
+        sql += "is_processed = true, updated_at = %s WHERE id = %s;"
+        try:
+            cursor.execute(sql, (healthy, classification, datetime.now(), ids_classifications[i]))
+            conn.commit()
+            result = 'Saudável' if healthy else 'Doente'
+            if not healthy:
+                result+= ', com a doença ' + classification
+            print('Classificação com id: {}, encontrasse {}!'.format(ids_classifications[i], result))
+        except Exception as e:
+            print('Erro ao atualizar registro: ' + ids_classifications[i])
+            print('Erro:')
+            print(e)
     cursor.close()
 
 def classification():
-    ids_classifications, path_images = search_pending_classification()
+    search_pending_classification()
+    if len(path_images) > 0:
+        load_images()
+        pre_processing_images()
+        randon_forest_classification()
+        labeling_classifications()
+        update_classification_register()
+        print()
+        print(datetime.now())
+        print(50*'*')
+        print()
+    else:
+        print(50*'*')
+        print('Nenhuma classificação pendente as {}'.format(datetime.now()))
+        print(50*'*')
 
-    for i, path_image in enumerate(path_images):
-        image = Image.open(path_image)
-        predict = randon_forest_classification(image)
-        healthy = predict == 'Saudável'
-        disease = predict
-        update_classification_register(ids_classifications[i], healthy, disease)
-        print(healthy)
-        print(predict)
 
 classification()
 conn.close()
