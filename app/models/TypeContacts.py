@@ -16,9 +16,7 @@ class TypeContacts(db.Model):
         self.name = name
         self.description = description
 
-#Definindo o Schema do Marshmallow para facilitar a utilização de JSON
 class TypeContactSchema(ma.Schema):
-    # contacts = ma.Nested('ContactSchema', many=True, exclude=('type_contact',))
     class Meta:
         fields = ('id', 'name', 'description')
         include_fk = True

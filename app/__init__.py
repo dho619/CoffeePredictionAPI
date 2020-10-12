@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
-from flask_executor import Executor
 import sys
 from .services.startDB import starting_DB
 
@@ -9,8 +8,6 @@ app = Flask(__name__)
 app.config.from_object('config_app')
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
-
-runsInTheBackground = Executor(app) #trabalhar background em processos demorados
 
 from .models import Users, Profiles, TypeContacts, Contacts, TypeAreas, Areas, Classifications
 from .resources import Users

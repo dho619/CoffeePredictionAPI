@@ -23,12 +23,10 @@ class Users(db.Model):
         self.password = password
         self.name = name
 
-#Definindo o Schema do Marshmallow para facilitar a utilização de JSON
 class UserSchema(ma.Schema):
     profile = ma.Nested('ProfileSchema')
     areas = ma.Nested('AreaSchema', many=True)
     contacts = ma.Nested('ContactSchema', many=True)
-    # classifications = ma.Nested('ClassificationSchema', many=True, exclude=('user',))
     class Meta:
         fields = ('id', 'email', 'name', 'created_at', 'updated_at', 'profile', 'areas', 'contacts')
 

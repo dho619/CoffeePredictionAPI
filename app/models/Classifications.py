@@ -24,9 +24,7 @@ class Classifications(db.Model):
         self.description = description
         self.image_path = image_path
 
-#Definindo o Schema do Marshmallow para facilitar a utilização de JSON
 class ClassificationSchema(ma.Schema):
-    # user = ma.Nested('UserSchema', many=False, exclude=('classifications',))
     area = ma.Nested('AreaSchema', many=False, exclude=('classifications',))
 
     class Meta:

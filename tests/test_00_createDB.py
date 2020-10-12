@@ -1,5 +1,3 @@
-#ROTA PARA CRIACAO DE BANCO PARA TESTE
-
 import requests
 from .config_tests import token_admin, baseURL
 

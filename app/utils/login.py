@@ -23,7 +23,6 @@ def encode_auth_token(user):
             algorithm='HS256'
         )
     except Exception as e:
-        # print(e)
         return None
 
 def decode_auth_token(auth_token):

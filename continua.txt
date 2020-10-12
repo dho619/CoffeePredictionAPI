@@ -1,4 +1,4 @@
-1 - O serviço para classificar imagem será rodado por um programa a parte, que rodará automaticamente de x e x tempos
-2 - Arrumar testes automatizados, pois como troco o id para guid esta dando erros
+
+1 - Arrumar testes automatizados, pois como troco o id para guid esta dando erros
 
 futuramente criar mais testes automáticos

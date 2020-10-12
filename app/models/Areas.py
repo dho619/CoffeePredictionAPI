@@ -23,11 +23,9 @@ class Areas(db.Model):
         self.location = location
 
 
-#Definindo o Schema do Marshmallow para facilitar a utilização de JSON
 class AreaSchema(ma.Schema):
     type_area = ma.Nested('TypeAreaSchema', many=False)
     classifications = ma.Nested('ClassificationSchema', many=True)
-    # user = ma.Nested('UserSchema', many=False, exclude=('areas',))
 
     class Meta:
         fields = ('id', 'name', 'description', 'location', 'type_area', 'user_id', 'classifications')

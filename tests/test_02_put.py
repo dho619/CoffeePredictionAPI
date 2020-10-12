@@ -1,5 +1,3 @@
-# # TESTE DE UPDATE DOS REGISTROS DAS TABELAS
-#
 # import requests
 # from .config_tests import token_comum, token_admin, baseURL
 # headerComum = token_comum

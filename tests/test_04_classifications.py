@@ -1,5 +1,3 @@
-# #TESTE VOLTADOS PARA A CLASSIFICACAO
-#
 # import requests, base64
 # from PIL import Image
 # from .config_tests import token_comum, token_admin, baseURL

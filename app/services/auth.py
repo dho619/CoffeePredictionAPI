@@ -18,7 +18,6 @@ def user_logged(token):
         return False
 
 
-#criando um decorador para autentificar se e admin
 def is_admin(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
@@ -28,7 +27,6 @@ def is_admin(f):
     return wrapper
 
 
-# funcao para verificar se id passado e o id da pessoa logada
 def is_your(id):
     if id == None:
         return False
@@ -36,7 +34,6 @@ def is_your(id):
     isAdmin = get_profile_by_user(user) == 'admin'
     return user and (isAdmin or user.id == id)
 
-#funcao que retorna o id do usario logado e se ele é admin
 def token_user():
     user = get_user_by_email_or_id({'id': auth.current_user})
     isAdmin = get_profile_by_user(user) == 'admin'
