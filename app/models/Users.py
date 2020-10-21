@@ -27,8 +27,10 @@ class UserSchema(ma.Schema):
     profile = ma.Nested('ProfileSchema')
     areas = ma.Nested('AreaSchema', many=True)
     contacts = ma.Nested('ContactSchema', many=True)
+    classifications = ma.Nested('ClassificationSchema', many=True)
+
     class Meta:
-        fields = ('id', 'email', 'name', 'created_at', 'updated_at', 'profile', 'areas', 'contacts')
+        fields = ('id', 'email', 'name', 'created_at', 'updated_at', 'profile', 'areas', 'contacts', 'classifications')
 
 user_schema = UserSchema()
 users_schema = UserSchema( many = True )

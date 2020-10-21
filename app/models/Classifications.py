@@ -25,10 +25,10 @@ class Classifications(db.Model):
         self.image_path = image_path
 
 class ClassificationSchema(ma.Schema):
-    area = ma.Nested('AreaSchema', many=False, exclude=('classifications',))
+    area = ma.Nested('AreaSchema', many=False)
 
     class Meta:
-        fields = ( 'area', 'id', 'name', 'description', 'healthy', 'disease', 'created_at', 'updated_at')
+        fields = ( 'id', 'name', 'description', 'healthy', 'disease', 'area', 'created_at', 'updated_at')
 
 classification_schema = ClassificationSchema()
 classifications_schema = ClassificationSchema( many = True )

@@ -8,7 +8,6 @@ from ..utils.gets import get_profile_by_user
 
 def encode_auth_token(user):
     try:
-        print(get_profile_by_user(user))
         payload = {
             #'exp': datetime.now() + timedelta(days=3), #valido por tres dias
             'iat': datetime.now(),

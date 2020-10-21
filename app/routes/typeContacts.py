@@ -1,15 +1,12 @@
 from app import app
-from flask import jsonify
 from ..resources import TypeContacts
 from ..services.auth import auth, is_admin
 
 @app.route('/typeContacts', methods=['GET'])
-@auth.login_required
 def get_typeContacts():
     return TypeContacts.get_typeContacts()
 
 @app.route('/typeContacts/<id>', methods=['GET'])
-@auth.login_required
 def get_typeContact(id):
     return TypeContacts.get_typeContact(id)
 
@@ -27,6 +24,6 @@ def update_typeContact(id):
 
 @app.route('/typeContacts/<id>', methods=['DELETE'])
 @auth.login_required
-@is_admin 
+@is_admin
 def delete_typeContact(id):
     return TypeContacts.delete_typeContact(id)

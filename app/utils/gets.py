@@ -23,4 +23,4 @@ def get_profile_by_user(user):
         return None
 
     profile = Profiles.query.filter_by(id=user.profile_id).first()
-    return profile.name.lower
+    return profile.name

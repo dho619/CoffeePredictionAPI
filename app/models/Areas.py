@@ -25,10 +25,8 @@ class Areas(db.Model):
 
 class AreaSchema(ma.Schema):
     type_area = ma.Nested('TypeAreaSchema', many=False)
-    classifications = ma.Nested('ClassificationSchema', many=True)
-
     class Meta:
-        fields = ('id', 'name', 'description', 'location', 'type_area', 'user_id', 'classifications')
+        fields = ('id', 'name', 'description', 'location', 'type_area', 'user_id')
 
 area_schema = AreaSchema()
 areas_schema = AreaSchema( many = True )

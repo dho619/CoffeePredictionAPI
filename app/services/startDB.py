@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash
 
-def starting_DB(db, Users, Profiles, TypeAreas, TypeContacts):
+def starting_DB(db, Users, Profiles, TypeAreas, TypeContacts, DatabaseVersions):
     print('..| Criando banco...')
     db.drop_all()
     db.create_all()
@@ -10,6 +10,7 @@ def starting_DB(db, Users, Profiles, TypeAreas, TypeContacts):
     create_users(db, Users, Profiles)
     create_typeArea(db, TypeAreas)
     create_typeContacts(db, TypeContacts)
+    create_databaseVersions(db, DatabaseVersions)
     print('..| Banco Pronto para uso!')
 
 def create_profiles(db, Profiles):
@@ -44,4 +45,9 @@ def create_typeContacts(db, TypeContacts):
     email = TypeContacts.TypeContacts('email', 'Email')
     outro = TypeContacts.TypeContacts('outro', 'Outro')
     db.session.add_all([celular, telefone, outro])
+    db.session.commit()
+
+def create_databaseVersions(db, DatabaseVersions):
+    db_offline = DatabaseVersions.DatabaseVersions('db_offline', '1.0.0', 'Versão Banco offline')
+    db.session.add_all([db_offline])
     db.session.commit()

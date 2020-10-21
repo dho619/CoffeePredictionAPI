@@ -1,15 +1,12 @@
 from app import app
-from flask import jsonify
 from ..resources import TypeAreas
 from ..services.auth import auth, is_admin
 
 @app.route('/typeAreas', methods=['GET'])
-@auth.login_required
 def get_typeAreas():
     return TypeAreas.get_typeAreas()
 
 @app.route('/typeAreas/<id>', methods=['GET'])
-@auth.login_required
 def get_typeArea(id):
     return TypeAreas.get_typeArea(id)
 

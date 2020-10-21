@@ -1,5 +1,4 @@
 from app import app
-from flask import jsonify
 from ..resources import Areas
 from ..services.auth import auth, is_admin
 
