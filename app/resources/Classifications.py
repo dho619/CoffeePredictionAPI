@@ -8,12 +8,16 @@ from ..services.auth import is_your, token_user
 from ..utils.generalFunctions import save_image
 
 def post_classification():
+    id = ""
     try:
         name = request.json['name']
         description = request.json['description']
         imageBase64 = request.json['image']
         user = Users.query.get(request.json['user_id'])
         area = Areas.query.get(request.json['area_id'])
+
+        if 'id' in request.json:
+            id = request.json['id']
     except:
         return jsonify({'message': 'Expected name, description, image, user_id and area_id'}), 400
 
@@ -31,6 +35,10 @@ def post_classification():
     classification = Classifications(name, description, image_path)
     classification.user = user
     classification.area = area
+
+    if id != "":
+        classification.id = id
+
     classification.is_processed = False
     classification.is_sended = True
 

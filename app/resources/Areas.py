@@ -13,6 +13,9 @@ def post_area():
         location = request.json['location']
         user = Users.query.get(request.json['user_id'])
         type_area = TypeAreas.query.get(request.json['type_area_id'])
+
+        if 'id' in request.json:
+            id = request.json['id']
     except:
         return jsonify({'message': 'Expected name, description, location, user_id and type_area_id'}), 400
 
@@ -25,6 +28,10 @@ def post_area():
     area = Areas(name, description, location)
     area.type_area = type_area
     area.user = user
+
+    if id != "":
+        area.id = id
+
     try:
         db.session.add(area)
         db.session.commit()
