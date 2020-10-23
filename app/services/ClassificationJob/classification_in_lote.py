@@ -36,7 +36,7 @@ def diseaseDictionary(num):
         disease = 'Ferrugem'
     else:
         disease = 'Outras'
-        return disease
+    return disease
 
 def search_pending_classification():
     try:
@@ -102,8 +102,7 @@ def update_classification_register():
             print('Classificação com id: {}, encontrasse {}!'.format(ids_classifications[i], result))
         except Exception as e:
             print('Erro ao atualizar registro: ' + ids_classifications[i])
-            print('Erro:')
-            print(e)
+            print('Erro:' + e)
     cursor.close()
 
 def classification():
