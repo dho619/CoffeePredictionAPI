@@ -7,6 +7,7 @@ from ..models.TypeAreas import TypeAreas
 from ..services.auth import is_your, token_user
 
 def post_area():
+    id = ""
     try:
         name = request.json['name']
         description = request.json['description'][:500]
