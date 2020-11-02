@@ -5,6 +5,7 @@ from base64 import b64decode
 from datetime import datetime
 from pathlib import Path
 from PIL import Image
+from PIL.ExifTags import TAGS
 
 def create_guid():
     return str(uuid.uuid4())
@@ -24,10 +25,12 @@ def save_image(img_base64, user_id):
         return '', 'No image reported'
     try:
         image = open_base64_image(img_base64)
-        nameImage = user_id + '_' + str(datetime.now())[:-7].replace(' ', '_') + '.jpg'
+        nameImage =  str(datetime.now())[:-7].replace(' ', '_') + '.jpg'
         path = app.config['PATH_TO_SAVE_IMAGES']
         create_folder_if_not_exist(path)
-        pathImage = path + '/' + nameImage
+        pathUser = path + '/' + user_id
+        create_folder_if_not_exist(pathUser)
+        pathImage = pathUser + '/' + nameImage
         image.save(pathImage)
         return pathImage, None
     except Exception as e:

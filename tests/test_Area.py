@@ -14,7 +14,7 @@ type_area_id = requests.get(
 def test_post_Area_01():
     response = requests.post(
                 baseURL + 'areas',
-                json = {"name": "Minha Chacara", 	"description": "Essa é minha chacara que eu comprei com meu money", "location": "12349994499", 	"user_id": user_id, "type_area_id": type_area_id },
+                json = {"name": "Minha Chacara", 	"description": "Essa é minha chacara que eu comprei com meu money", "user_id": user_id, "type_area_id": type_area_id },
                 headers=headerComum
             )
     area_id = response.json()['data']
@@ -23,7 +23,7 @@ def test_post_Area_01():
 def test_post_Area_02():
     response = requests.post(
                 baseURL + 'areas',
-                json = {"name": "Minha Chacara", 	"description": "Essa é minha chacara que eu comprei com meu money", "location": "12349994499" },
+                json = {"name": "Minha Chacara", 	"description": "Essa é minha chacara que eu comprei com meu money" },
                 headers=headerComum
             )
 
@@ -32,7 +32,7 @@ def test_post_Area_02():
 def test_post_Area_03():
     response = requests.post(
                 baseURL + 'areas',
-                json = {"name": "Minha Chacara", 	"description": "Essa é minha chacara que eu comprei com meu money", "location": "12349994499", 	"user_id": user_id, "type_area_id": type_area_id },
+                json = {"name": "Minha Chacara", 	"description": "Essa é minha chacara que eu comprei com meu money", "user_id": user_id, "type_area_id": type_area_id },
                 headers={"Authorization": "asdsa"}
             )
     assert response.status_code == 401

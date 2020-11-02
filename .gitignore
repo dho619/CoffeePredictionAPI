@@ -5,3 +5,4 @@ tests/config_tests.py
 config_app.py
 app/temp/*.*
 app/temp
+app/images/*.*

@@ -11,14 +11,13 @@ def post_area():
     try:
         name = request.json['name']
         description = request.json['description'][:500]
-        location = request.json['location']
         user = Users.query.get(request.json['user_id'])
         type_area = TypeAreas.query.get(request.json['type_area_id'])
 
         if 'id' in request.json:
             id = request.json['id']
     except:
-        return jsonify({'message': 'Expected name, description, location, user_id and type_area_id'}), 400
+        return jsonify({'message': 'Expected name, description, user_id and type_area_id'}), 400
 
     if not user or not type_area:
         return jsonify({'message': 'type_area_id or user_id does not exist'}), 400
@@ -26,7 +25,7 @@ def post_area():
     if not is_your(user.id):
         return jsonify({'message': "Unauthorized action."}), 401
 
-    area = Areas(name, description, location)
+    area = Areas(name, description)
     area.type_area = type_area
     area.user = user
 
@@ -55,7 +54,6 @@ def update_area(id):
 
     area.name = request.json['name'] if 'name' in request.json else area.name
     area.description = request.json['description'] if 'description' in request.json else area.description
-    area.location = request.json['location'] if 'location' in request.json else area.location
     area.type_area = TypeAreas.query.get(request.json['type_area_id']) if 'type_area_id' in request.json else area.type_area
 
     try:

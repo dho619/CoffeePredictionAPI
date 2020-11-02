@@ -6,7 +6,7 @@ from ..utils.generalFunctions import create_guid
 class DatabaseVersions(db.Model):
     id = db.Column(db.String(37), primary_key=True, default=create_guid, unique=True, nullable=False)
     name = db.Column(db.String(20), nullable=False)
-    version = db.Column(db.String(20), nullable=False)
+    version = db.Column(db.String(20), nullable=False, default='1.0.0')
     description = db.Column(db.String(500))
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now())

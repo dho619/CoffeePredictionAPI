@@ -13,13 +13,15 @@ def post_classification():
         name = request.json['name']
         description = request.json['description']
         imageBase64 = request.json['image']
+        location = request.json['location']
         user = Users.query.get(request.json['user_id'])
         area = Areas.query.get(request.json['area_id'])
 
         if 'id' in request.json:
             id = request.json['id']
-    except:
-        return jsonify({'message': 'Expected name, description, image, user_id and area_id'}), 400
+    except Exception as e:
+        print(e)
+        return jsonify({'message': 'Expected name, description, image, location, user_id and area_id'}), 400
 
     if not user or not area:
         return jsonify({'message': 'area_id or user_id does not exist'}), 400
@@ -30,9 +32,10 @@ def post_classification():
     image_path, error = save_image(imageBase64, user.id)
 
     if error:
-        return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
+        print(error)
+        return jsonify({'message': 'We had an error processing your data: ' + error, 'data': {}}), 400
 
-    classification = Classifications(name, description, image_path)
+    classification = Classifications(name, description, image_path, location)
     classification.user = user
     classification.area = area
 
@@ -105,5 +108,6 @@ def delete_classification(id):
         db.session.commit()
         result = classification_schema.dump(classification)
         return jsonify({"message": "Sucessfully deleted", "data": result}), 200
-    except:
+    except Exception as err:
+        print(err)
         return jsonify({"message": "Unable to deleted", "data": {}}), 500
