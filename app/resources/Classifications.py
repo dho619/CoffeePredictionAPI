@@ -1,5 +1,7 @@
 from flask import request, jsonify
 from os import urandom
+from datetime import datetime
+
 from app import db
 from ..models.Classifications import Classifications, classification_schema, classifications_schema
 from ..models.Users import Users
@@ -20,7 +22,6 @@ def post_classification():
         if 'id' in request.json:
             id = request.json['id']
     except Exception as e:
-        print(e)
         return jsonify({'message': 'Expected name, description, image, location, user_id and area_id'}), 400
 
     if not user or not area:
@@ -32,7 +33,6 @@ def post_classification():
     image_path, error = save_image(imageBase64, user.id)
 
     if error:
-        print(error)
         return jsonify({'message': 'We had an error processing your data: ' + error, 'data': {}}), 400
 
     classification = Classifications(name, description, image_path, location)
@@ -43,7 +43,7 @@ def post_classification():
         classification.id = id
 
     classification.is_processed = False
-    classification.is_sended = True
+    classification.is_sended = False
 
     try:
         db.session.add(classification)
@@ -51,18 +51,19 @@ def post_classification():
         result = classification_schema.dump(classification)
         return jsonify({'message': 'Sucessfully registered', 'data': result}), 201
     except Exception as e:
-            print(e)
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
 
 def put_classification(id):
+    print(id)
     classification = Classifications.query.get(id)
 
     if not classification:
         return jsonify({'message': "Classification don't exist", 'data': {}}), 404
 
     classification.name = request.json['name'] if 'name' in request.json else classification.name
-    classification.description = prequest.json['description'] if 'description' in request.json else classification.description
+    classification.description = request.json['description'] if 'description' in request.json else classification.description
+    classification.updated_at = datetime.now()
 
     if not is_your(classification.user_id):
         return jsonify({'message': "Unauthorized action."}), 401

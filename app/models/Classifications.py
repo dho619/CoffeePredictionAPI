@@ -26,7 +26,6 @@ class Classifications(db.Model):
         self.description = description
         self.image_path = image_path
         self.location = location
-        self.is_sended = False
 
 class ClassificationSchema(ma.Schema):
     def get_imageBase64(self, obj):

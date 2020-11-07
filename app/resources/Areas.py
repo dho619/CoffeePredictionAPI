@@ -1,5 +1,7 @@
 from flask import request, jsonify
 from sqlalchemy import exc
+from datetime import datetime
+
 from app import db
 from ..models.Areas import Areas, area_schema, areas_schema
 from ..models.Users import Users
@@ -55,7 +57,8 @@ def update_area(id):
     area.name = request.json['name'] if 'name' in request.json else area.name
     area.description = request.json['description'] if 'description' in request.json else area.description
     area.type_area = TypeAreas.query.get(request.json['type_area_id']) if 'type_area_id' in request.json else area.type_area
-
+    area.updated_at = datetime.now()
+    
     try:
         db.session.commit()
         result = area_schema.dump(area)
