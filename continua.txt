@@ -1,4 +1,5 @@
 
-1 - Arrumar testes automatizados, pois como troco o id para guid esta dando erros
+- criar routa de envio de feedback
+- Arrumar testes automatizados, pois como troco o id para guid esta dando erros
 
 futuramente criar mais testes automáticos

@@ -1,1 +1,1 @@
-from ..routes import users, profiles, contacts, typeContacts, typeAreas, areas, classifications, dbcreate, databaseVersions
+from ..routes import users, profiles, contacts, typeContacts, typeAreas, areas, classifications, dbcreate, databaseVersions, sendEmail
