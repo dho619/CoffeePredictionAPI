@@ -1,5 +1,6 @@
 
 - criar routa de envio de feedback
+- criar log para salvar erros (princiapalmente feedback)
 - Arrumar testes automatizados, pois como troco o id para guid esta dando erros
 
 futuramente criar mais testes automáticos

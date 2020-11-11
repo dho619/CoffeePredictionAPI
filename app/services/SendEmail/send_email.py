@@ -5,10 +5,9 @@ import smtplib
 def send(messageInfo, serverInfo):
 
     if (not messageInfo) or (not serverInfo):
-        return False, 'Expected message and email server information.'
+        return False
 
     try:
-
         message = MIMEMultipart()
 
         host = serverInfo['host']
@@ -30,6 +29,5 @@ def send(messageInfo, serverInfo):
 
         server.quit()
 
-        return True, ''
     except Exception as err:
-        return False, err
+        return False
