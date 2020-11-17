@@ -1,5 +1,5 @@
 import datetime
-
+from sqlalchemy.dialects.mysql import DATETIME
 from app import db, ma
 from ..utils.generalFunctions import create_guid
 
@@ -9,8 +9,8 @@ class Contacts(db.Model):
     description = db.Column(db.String(100))
     user_id = db.Column(db.String(37), db.ForeignKey('users.id'))
     type_contact_id = db.Column(db.String(37), db.ForeignKey('type_contacts.id'))
-    created_at = db.Column(db.DateTime, default=datetime.datetime.now())
-    updated_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    created_at = db.Column(DATETIME(fsp=6), default=datetime.datetime.now())
+    updated_at = db.Column(DATETIME(fsp=6), default=datetime.datetime.now())
 
     user = db.relationship("Users", back_populates="contacts")
     type_contact = db.relationship("TypeContacts", back_populates="contacts")

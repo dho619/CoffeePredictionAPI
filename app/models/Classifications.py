@@ -1,5 +1,6 @@
 import datetime
 from flask_marshmallow import fields
+from sqlalchemy.dialects.mysql import DATETIME
 from app import db, ma
 from ..utils.generalFunctions import create_guid, image_to_base64
 import base64
@@ -14,8 +15,8 @@ class Classifications(db.Model):
     disease = db.Column(db.String(50))
     is_processed = db.Column(db.Boolean, nullable=False, default=False)
     is_sended = db.Column(db.Boolean, nullable=False, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.datetime.now())
-    updated_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    created_at = db.Column(DATETIME(fsp=6), default=datetime.datetime.now())
+    updated_at = db.Column(DATETIME(fsp=6), default=datetime.datetime.now())
     user_id = db.Column(db.String(37), db.ForeignKey('users.id'))
     area_id = db.Column(db.String(37), db.ForeignKey('areas.id'))
 

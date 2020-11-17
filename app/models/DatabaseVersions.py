@@ -1,5 +1,5 @@
 import datetime
-
+from sqlalchemy.dialects.mysql import DATETIME
 from app import db, ma
 from ..utils.generalFunctions import create_guid
 
@@ -8,8 +8,8 @@ class DatabaseVersions(db.Model):
     name = db.Column(db.String(20), nullable=False)
     version = db.Column(db.String(20), nullable=False, default='1.0.0')
     description = db.Column(db.String(500))
-    created_at = db.Column(db.DateTime, default=datetime.datetime.now())
-    updated_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    created_at = db.Column(DATETIME(fsp=6), default=datetime.datetime.now())
+    updated_at = db.Column(DATETIME(fsp=6), default=datetime.datetime.now())
 
     def __init__(self, name, version, description):
         self.name = name

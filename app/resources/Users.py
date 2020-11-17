@@ -18,8 +18,8 @@ def post_user():
     pass_hash = generate_password_hash(password)
     user = Users(email, pass_hash, name)
 
-    profileUser = Profiles.query.filter_by(name == 'user').first()
-    user.profile = profile
+    profileUser = Profiles.query.filter_by(name = 'user').first()
+    user.profile = profileUser
     try:
         db.session.add(user)
         db.session.commit()
@@ -71,7 +71,7 @@ def get_users():
 
 def get_user(id):
     user = Users.query.get(id)
-
+    user.classifications = user.classifications[0:9]
     if user:
         result = user_schema.dump(user)
         return jsonify({"message": "Sucessfully fetched", "data": result}),200

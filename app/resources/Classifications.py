@@ -77,8 +77,13 @@ def put_classification(id):
 
 
 def get_classifications():
+    page = request.args.get('page', default = 1, type = int)
+
     loggedUser = token_user()
-    classifications = Classifications.query.filter_by(user_id=loggedUser['id']).order_by(Classifications.created_at.desc())
+    per_page = 5
+
+    classifications = Classifications.query.filter_by(user_id=loggedUser['id']).order_by(Classifications.created_at.desc()).paginate(page, per_page, False).items
+
     if classifications:
         result = classifications_schema.dump(classifications)
         return jsonify({"message": "Sucessfully fetched", "data": result}), 200
