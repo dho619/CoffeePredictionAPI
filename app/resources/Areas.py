@@ -58,7 +58,7 @@ def update_area(id):
     area.description = request.json['description'] if 'description' in request.json else area.description
     area.type_area = TypeAreas.query.get(request.json['type_area_id']) if 'type_area_id' in request.json else area.type_area
     area.updated_at = datetime.now()
-    
+
     try:
         db.session.commit()
         result = area_schema.dump(area)
@@ -73,7 +73,10 @@ def update_area(id):
 
 def get_areas():
     loggedUser = token_user()
-    areas = Areas.query.filter_by(user_id=loggedUser['id'])
+    if loggedUser['admin']:
+        areas = Areas.query.all()
+    else:
+        areas = Areas.query.filter_by(user_id=loggedUser['id'])
 
     if areas:
         result = areas_schema.dump(areas)

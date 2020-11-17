@@ -10,6 +10,7 @@ from ..services.auth import is_your, token_user
 from ..utils.generalFunctions import save_image
 
 def post_classification():
+    print(request.json['area_id'])
     id = ""
     try:
         name = request.json['name']
@@ -63,6 +64,13 @@ def put_classification(id):
 
     classification.name = request.json['name'] if 'name' in request.json else classification.name
     classification.description = request.json['description'] if 'description' in request.json else classification.description
+
+    if 'area_id' in request.json:
+        area = Areas.query.get(request.json['area_id'])
+        if not area:
+            return jsonify({'message': 'area_id does not exist'}), 400
+        classification.area = area
+
     classification.updated_at = datetime.now()
 
     if not is_your(classification.user_id):
