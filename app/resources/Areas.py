@@ -38,7 +38,7 @@ def post_area():
         db.session.add(area)
         db.session.commit()
         result = area_schema.dump(area)
-        return jsonify({'message': 'Sucessfully registered', 'data': result.decode('utf-8')}), 201
+        return jsonify({'message': 'Sucessfully registered', 'data': result}), 201
     except exc.IntegrityError as e:
         return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
     except:
@@ -62,7 +62,7 @@ def update_area(id):
     try:
         db.session.commit()
         result = area_schema.dump(area)
-        return jsonify({'message': 'Sucessfully updated', 'data': result.decode('utf-8')}), 200
+        return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
     except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
@@ -90,7 +90,7 @@ def get_area(id):
         if not is_your(area.user_id):
             return jsonify({'message': "Unauthorized action."}), 401
         result = area_schema.dump(area)
-        return jsonify({"message": "Sucessfully fetched", "data": result.decode('utf-8')}), 200
+        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
 
     return jsonify({'message': "Area don't exist", 'data': {}}), 404
 

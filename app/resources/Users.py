@@ -26,7 +26,7 @@ def post_user():
 
         token = encode_auth_token(user)
 
-        return jsonify({'message': 'Sucessfully registered', 'token': token.decode('utf-8')}), 201
+        return jsonify({'message': 'Sucessfully registered', 'token': token}), 201
     except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This email is already in use', 'data': {}}), 406
@@ -52,7 +52,7 @@ def update_user(id):
     try:
         db.session.commit()
         result = user_schema.dump(user)
-        return jsonify({'message': 'Sucessfully updated', 'data': result.decode('utf-8')}), 200
+        return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
     except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This email is already in use', 'data': {}}), 406
@@ -66,7 +66,7 @@ def get_users():
 
     if users:
         result = users_schema.dump(users)
-        return jsonify({"message": "Sucessfully fetched", "data": result.decode('utf-8')}), 200
+        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
     return jsonify({"message": "nothing found", "data":{}})
 
 def get_user(id):
@@ -74,7 +74,7 @@ def get_user(id):
     user.classifications = user.classifications[0:9]
     if user:
         result = user_schema.dump(user)
-        return jsonify({"message": "Sucessfully fetched", "data": result.decode('utf-8')}),200
+        return jsonify({"message": "Sucessfully fetched", "data": result}),200
     return jsonify({'message': "User don't exist", 'data': {}}), 404
 
 def delete_user(id):
@@ -87,6 +87,6 @@ def delete_user(id):
         db.session.delete(user)
         db.session.commit()
         result = user_schema.dump(user)
-        return jsonify({"message": "Sucessfully deleted", "data": result.decode('utf-8')}), 200
+        return jsonify({"message": "Sucessfully deleted", "data": result}), 200
     except:
         return jsonify({"message": "Unable to deleted", "data": {}}), 500

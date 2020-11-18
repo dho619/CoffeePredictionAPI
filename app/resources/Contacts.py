@@ -30,7 +30,7 @@ def post_contact():
         db.session.add(contact)
         db.session.commit()
         result = contact_schema.dump(contact)
-        return jsonify({'message': 'Sucessfully registered', 'data': result.decode('utf-8')}), 201
+        return jsonify({'message': 'Sucessfully registered', 'data': result}), 201
     except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This contact is already in use', 'data': {}}), 406
@@ -58,7 +58,7 @@ def update_contact(id):
     try:
         db.session.commit()
         result = contact_schema.dump(contact)
-        return jsonify({'message': 'Sucessfully updated', 'data': result.decode('utf-8')}), 200
+        return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
     except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This contact is already in use', 'data': {}}), 406
@@ -74,7 +74,7 @@ def get_contacts():
 
     if contacts:
         result = contacts_schema.dump(contacts)
-        return jsonify({"message": "Sucessfully fetched", "data": result.decode('utf-8')}), 200
+        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
     return jsonify({"message": "nothing found", "data":{}})
 
 def get_contact(id):
@@ -84,7 +84,7 @@ def get_contact(id):
         if not is_your(contact.user_id):
             return jsonify({'message': "Unauthorized action."}), 401
         result = contact_schema.dump(contact)
-        return jsonify({"message": "Sucessfully fetched", "data": result.decode('utf-8')}), 200
+        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
     #se nao existir
     return jsonify({'message': "Contact don't exist", 'data': {}}), 404
 
@@ -106,7 +106,7 @@ def delete_contact(id):
         db.session.delete(contact)
         db.session.commit()
         result = contact_schema.dump(contact)
-        return jsonify({"message": "Sucessfully deleted", "data": result.decode('utf-8')}), 200
+        return jsonify({"message": "Sucessfully deleted", "data": result}), 200
     except Exception as e:
         print(e)
         return jsonify({"message": "Unable to deleted", "data": {}}), 500

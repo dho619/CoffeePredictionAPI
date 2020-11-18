@@ -7,7 +7,7 @@ def get_versions():
 
         if versions:
             result = databaseVersions_schema.dump(versions)
-            return jsonify({"message": "Sucessfully fetched", "data": result.decode('utf-8')}), 200
+            return jsonify({"message": "Sucessfully fetched", "data": result}), 200
         return jsonify({"message": "nothing found", "data":{}}), 400
     except:
         return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
@@ -18,7 +18,7 @@ def get_version(name):
 
         if version:
             result = databaseVersion_schema.dump(version)
-            return jsonify({"message": "Sucessfully fetched", "data": result.decode('utf-8')}), 200
+            return jsonify({"message": "Sucessfully fetched", "data": result}), 200
         return jsonify({"message": "nothing found", "data":{}}), 400
     except:
         return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
