@@ -16,7 +16,7 @@ def post_profile():
         db.session.add(profile)
         db.session.commit()
         result = profile_schema.dump(profile)
-        return jsonify({'message': 'Sucessfully registered', 'data': result}), 201
+        return jsonify({'message': 'Sucessfully registered', 'data': result.decode('utf-8')}), 201
     except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
@@ -37,7 +37,7 @@ def update_profile(id):
     try:
         db.session.commit()
         result = profile_schema.dump(profile)
-        return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
+        return jsonify({'message': 'Sucessfully updated', 'data': result.decode('utf-8')}), 200
     except exc.IntegrityError as e:
         if 'Duplicate entry' in e.orig.args[1]:
             return jsonify({'message': 'This name is already in use', 'data': {}}), 406
@@ -51,7 +51,7 @@ def get_profiles():
 
     if profiles:
         result = profiles_schema.dump(profiles)
-        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
+        return jsonify({"message": "Sucessfully fetched", "data": result.decode('utf-8')}), 200
     return jsonify({"message": "nothing found", "data":{}})
 
 def get_profile(id):
@@ -59,7 +59,7 @@ def get_profile(id):
 
     if profile:
         result = profile_schema.dump(profile)
-        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
+        return jsonify({"message": "Sucessfully fetched", "data": result.decode('utf-8')}), 200
 
     return jsonify({'message': "Profile don't exist", 'data': {}}), 404
 
@@ -73,6 +73,6 @@ def delete_profile(id):
         db.session.delete(profile)
         db.session.commit()
         result = profile_schema.dump(profile)
-        return jsonify({"message": "Sucessfully deleted", "data": result}), 200
+        return jsonify({"message": "Sucessfully deleted", "data": result.decode('utf-8')}), 200
     except:
         return jsonify({"message": "Unable to deleted", "data": {}}), 500

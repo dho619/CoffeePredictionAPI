@@ -50,7 +50,7 @@ def post_classification():
         db.session.add(classification)
         db.session.commit()
         result = classification_schema.dump(classification)
-        return jsonify({'message': 'Sucessfully registered', 'data': result}), 201
+        return jsonify({'message': 'Sucessfully registered', 'data': result.decode('utf-8')}), 201
     except Exception as e:
             return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
@@ -79,7 +79,7 @@ def put_classification(id):
     try:
         db.session.commit()
         result = classification_schema.dump(classification)
-        return jsonify({'message': 'Sucessfully updated', 'data': result}), 200
+        return jsonify({'message': 'Sucessfully updated', 'data': result.decode('utf-8')}), 200
     except:
         return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
@@ -94,7 +94,7 @@ def get_classifications():
 
     if classifications:
         result = classifications_schema.dump(classifications)
-        return jsonify({"message": "Sucessfully fetched", "data": result}), 200
+        return jsonify({"message": "Sucessfully fetched", "data": result.decode('utf-8')}), 200
     return jsonify({"message": "nothing found", "data":{}})
 
 def get_classification(id):
@@ -121,7 +121,7 @@ def delete_classification(id):
         db.session.delete(classification)
         db.session.commit()
         result = classification_schema.dump(classification)
-        return jsonify({"message": "Sucessfully deleted", "data": result}), 200
+        return jsonify({"message": "Sucessfully deleted", "data": result.decode('utf-8')}), 200
     except Exception as err:
         print(err)
         return jsonify({"message": "Unable to deleted", "data": {}}), 500
