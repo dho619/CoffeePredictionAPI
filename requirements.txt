@@ -15,3 +15,4 @@ Flask-Executor==0.9.3
 #Classification Job
 mysql-connector-python==8.0.20
 opencv-contrib-python==4.2.0.34
+exponent-server-sdk==1.0.0

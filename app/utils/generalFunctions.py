@@ -14,11 +14,6 @@ def create_folder_if_not_exist(path):
     new_path = Path(path)
     new_path.mkdir(parents=True, exist_ok=True)
 
-def image_to_base64(url):
-    image = Image.open(url)
-    img_base64 = b64encode(image.tobytes())
-    return img_base64
-
 def open_base64_image(img_base64):
     image_b64Decode = b64decode(str(img_base64))
     image = Image.open(BytesIO(image_b64Decode))
