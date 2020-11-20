@@ -76,7 +76,7 @@ def get_areas():
     if loggedUser['admin']:
         areas = Areas.query.all()
     else:
-        areas = Areas.query.filter_by(user_id=loggedUser['id'])
+        areas = Areas.query.filter_by(user_id=loggedUser['id']).order_by(Areas.name)
 
     if areas:
         result = areas_schema.dump(areas)
