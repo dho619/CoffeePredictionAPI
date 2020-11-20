@@ -21,7 +21,7 @@ def create_profiles(db, Profiles):
 
 def create_users(db, Users, Profiles):
     admin = Users.Users('admin@admin.com', generate_password_hash('123'), 'admin')
-    comum = Users.Users('comum@comum.com', generate_password_hash('123'), 'comum')
+    comum = Users.Users('userTeste@teste.com', generate_password_hash('123'), 'comum')
     profileAdmin = Profiles.Profiles.query.filter_by(name = 'admin').first()
     profileUser = Profiles.Profiles.query.filter_by(name = 'user').first()
     admin.profile = profileAdmin

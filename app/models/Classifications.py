@@ -13,6 +13,7 @@ class Classifications(db.Model):
     location = db.Column(db.String(1000))
     healthy = db.Column(db.Boolean)
     disease = db.Column(db.String(50))
+    tokenPush = db.Column(db.String(100))
     is_processed = db.Column(db.Boolean, nullable=False, default=False)
     is_sended = db.Column(db.Boolean, nullable=False, default=False)
     created_at = db.Column(DATETIME(fsp=6), default=datetime.datetime.now())
@@ -23,11 +24,12 @@ class Classifications(db.Model):
     user = db.relationship("Users", back_populates="classifications")
     area = db.relationship("Areas", back_populates="classifications")
 
-    def __init__(self, name, description, image_path, location):
+    def __init__(self, name, description, image_path, location, tokenPush):
         self.name = name
         self.description = description
         self.image_path = image_path
         self.location = location
+        self.tokenPush = tokenPush
 
 class ClassificationSchema(ma.Schema):
     def get_imageBase64(self, obj):
@@ -42,7 +44,7 @@ class ClassificationSchema(ma.Schema):
     image_base64 = fields.fields.Method('get_imageBase64')
 
     class Meta:
-        fields = ( 'id', 'name', 'description', 'image_path','image_base64', 'location', 'healthy', 'disease', 'area', 'created_at', 'updated_at', 'is_processed', 'is_sended')
+        fields = ( 'id', 'name', 'description', 'image_path','image_base64', 'location', 'healthy', 'disease', 'tokenPush', 'area', 'created_at', 'updated_at', 'is_processed', 'is_sended')
 
 
 classification_schema = ClassificationSchema()

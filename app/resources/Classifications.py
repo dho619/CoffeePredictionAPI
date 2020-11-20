@@ -10,20 +10,20 @@ from ..services.auth import is_your, token_user
 from ..utils.generalFunctions import save_image
 
 def post_classification():
-    print(request.json['area_id'])
     id = ""
     try:
         name = request.json['name']
         description = request.json['description']
         imageBase64 = request.json['image']
         location = request.json['location']
+        tokenPush = request.json['tokenPush']
         user = Users.query.get(request.json['user_id'])
         area = Areas.query.get(request.json['area_id'])
 
         if 'id' in request.json:
             id = request.json['id']
     except Exception as e:
-        return jsonify({'message': 'Expected name, description, image, location, user_id and area_id'}), 400
+        return jsonify({'message': 'Expected name, description, image, location, tokenPush, user_id and area_id'}), 400
 
     if not user or not area:
         return jsonify({'message': 'area_id or user_id does not exist'}), 400
@@ -36,7 +36,7 @@ def post_classification():
     if error:
         return jsonify({'message': 'We had an error processing your data: ' + error, 'data': {}}), 400
 
-    classification = Classifications(name, description, image_path, location)
+    classification = Classifications(name, description, image_path, location, tokenPush)
     classification.user = user
     classification.area = area
 
@@ -64,6 +64,7 @@ def put_classification(id):
 
     classification.name = request.json['name'] if 'name' in request.json else classification.name
     classification.description = request.json['description'] if 'description' in request.json else classification.description
+    classification.is_sended = request.json['is_sended'] if 'is_sended' in request.json else classification.is_sended
 
     if 'area_id' in request.json:
         area = Areas.query.get(request.json['area_id'])

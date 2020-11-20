@@ -46,7 +46,7 @@ def update_typeArea(id):
         return jsonify({'message': 'We had an error processing your data, please try again in a few moments', 'data': {}}), 400
 
 def get_typeAreas():
-    typeAreas = TypeAreas.query.all()
+    typeAreas = TypeAreas.query.order_by(TypeAreas.name).all()
 
     if typeAreas:
         result = typeAreas_schema.dump(typeAreas)
