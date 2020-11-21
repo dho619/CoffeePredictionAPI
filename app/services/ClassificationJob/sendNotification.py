@@ -7,10 +7,7 @@ from exponent_server_sdk import (
 )
 from requests.exceptions import ConnectionError, HTTPError
 
-
-# Basic arguments. You should extend this function with the push features you
-# want to use, or simply pass in a `PushMessage` object.
-def send_push_message(token, message, extra=None):
+def send_push_message(message, token, extra=None):
     try:
         response = PushClient().publish(
             PushMessage(to=token,
@@ -19,6 +16,3 @@ def send_push_message(token, message, extra=None):
         return response
     except Exception as e:
         print(e)
-
-
-print(send_push_message("ExponentPushToken[9L_MvSMgBLnAr8Li9N2caN]", "Hello Front"))

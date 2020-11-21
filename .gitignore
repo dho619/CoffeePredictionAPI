@@ -2,8 +2,9 @@ __pycache__/
 */__pycache__/
 .pytest_cache/
 *.pyc
-tests/config_tests.py
+config_tests.py
 config_app.py
+config_job.py
 app/temp/*.*
 app/temp
 app/users_photos/*.*
