@@ -12,7 +12,7 @@ def login():
     token = login_Usuario(email, password)
 
     if token:
-        return jsonify({'message': 'Sucessfully', 'token': token}), 201
+        return jsonify({'message': 'Sucessfully', 'token': token.decode('utf-8')}), 201
 
     else:
         return {'message': 'Invalid email or password', 'token': ''}, 401

@@ -35,7 +35,7 @@ class ClassificationSchema(ma.Schema):
     def get_imageBase64(self, obj):
         try:
             with open(obj.image_path, "rb") as image_file:
-                encoded_string = base64.b64encode(image_file.read())
+                encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
         except:
             encoded_string = ""
         return encoded_string
